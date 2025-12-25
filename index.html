@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="WebBridge.ai - Bezpečné mosty medzi SQL databázami a AI. Nekradneme dáta, dávame im mozog.">
+    <meta name="keywords" content="AI, SQL, Database, Gemini, Enterprise, Slovakia, Integrácia">
+    <title>WebBridge.ai - Nekradneme dáta, dávame im mozog</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <span class="logo-icon">⚡</span>
+                    <span class="logo-text">WebBridge<span class="logo-highlight">.ai</span></span>
+                </div>
+                <div class="nav-menu" id="navMenu">
+                    <a href="#home" class="nav-link">Domov</a>
+                    <a href="#features" class="nav-link">Funkcie</a>
+                    <a href="#use-cases" class="nav-link">Použitie</a>
+                    <a href="#security" class="nav-link">Bezpečnosť</a>
+                    <a href="#contact" class="nav-link">Kontakt</a>
+                    <a href="#" class="btn btn-primary">Začať</a>
+                </div>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-background">
+            <div class="grid-overlay"></div>
+            <div class="gradient-overlay"></div>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="badge-icon">🇸🇰</span>
+                    <span>Slovenské Enterprise AI riešenie</span>
+                </div>
+                <h1 class="hero-title">
+                    Nekradneme dáta,<br>
+                    <span class="gradient-text">dávame im mozog</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Bezpečné mosty medzi vašimi SQL databázami a umelou inteligenciou.
+                    Transformujte firemné dáta na inteligenciu s Gemini API.
+                </p>
+                <div class="hero-cta">
+                    <a href="#contact" class="btn btn-primary btn-large">
+                        <span>Vyskúšať demo</span>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M4 10H16M16 10L10 4M16 10L10 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                    <a href="#features" class="btn btn-secondary btn-large">
+                        Zistiť více
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">100%</div>
+                        <div class="stat-label">Bezpečnosť dát</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">24/7</div>
+                        <div class="stat-label">AI Dostupnosť</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">🇸🇰</div>
+                        <div class="stat-label">Made in Slovakia</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Prečo WebBridge<span class="gradient-text">.ai</span>?</h2>
+                <p class="section-subtitle">Enterprise riešenie pre bezpečnú AI integráciu s vašimi databázami</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <rect width="40" height="40" rx="8" fill="url(#gradient1)"/>
+                            <path d="M12 20L18 26L28 14" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            <defs>
+                                <linearGradient id="gradient1" x1="0" y1="0" x2="40" y2="40">
+                                    <stop offset="0%" stop-color="#667eea"/>
+                                    <stop offset="100%" stop-color="#764ba2"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Bezpečná integrácia</h3>
+                    <p class="feature-description">
+                        Vaše dáta zostávajú vo vašej databáze. Vytvárame len bezpečný most k AI, bez kopírovania citlivých informácií.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <rect width="40" height="40" rx="8" fill="url(#gradient2)"/>
+                            <circle cx="20" cy="20" r="8" stroke="white" stroke-width="2"/>
+                            <path d="M20 12V20L25 25" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                            <defs>
+                                <linearGradient id="gradient2" x1="0" y1="0" x2="40" y2="40">
+                                    <stop offset="0%" stop-color="#f093fb"/>
+                                    <stop offset="100%" stop-color="#f5576c"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Real-time AI odpovede</h3>
+                    <p class="feature-description">
+                        Získajte okamžité odpovede z vašich dát pomocou Gemini API. Analyzujte, dotazujte sa, objavujte v reálnom čase.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <rect width="40" height="40" rx="8" fill="url(#gradient3)"/>
+                            <path d="M10 20H30M20 10V30" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                            <defs>
+                                <linearGradient id="gradient3" x1="0" y1="0" x2="40" y2="40">
+                                    <stop offset="0%" stop-color="#4facfe"/>
+                                    <stop offset="100%" stop-color="#00f2fe"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Univerzálna kompatibilita</h3>
+                    <p class="feature-description">
+                        Funguje s MySQL, PostgreSQL, MSSQL a ďalšími SQL databázami. Jednoduchá integrácia do existujúcich systémov.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <rect width="40" height="40" rx="8" fill="url(#gradient4)"/>
+                            <path d="M20 10L25 15L20 20L15 15L20 10Z" stroke="white" stroke-width="2" fill="none"/>
+                            <path d="M20 20L25 25L20 30L15 25L20 20Z" stroke="white" stroke-width="2" fill="none"/>
+                            <defs>
+                                <linearGradient id="gradient4" x1="0" y1="0" x2="40" y2="40">
+                                    <stop offset="0%" stop-color="#fa709a"/>
+                                    <stop offset="100%" stop-color="#fee140"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Enterprise škálovateľnosť</h3>
+                    <p class="feature-description">
+                        Od malých projektov po veľké korporácie. Riešenie rastie s vašimi potrebami bez kompromisov v bezpečnosti.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <rect width="40" height="40" rx="8" fill="url(#gradient5)"/>
+                            <rect x="12" y="12" width="16" height="16" rx="2" stroke="white" stroke-width="2"/>
+                            <path d="M16 20L19 23L24 17" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                            <defs>
+                                <linearGradient id="gradient5" x1="0" y1="0" x2="40" y2="40">
+                                    <stop offset="0%" stop-color="#a8edea"/>
+                                    <stop offset="100%" stop-color="#fed6e3"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">GDPR compliant</h3>
+                    <p class="feature-description">
+                        Plná zhoda s európskymi nariadeniami o ochrane údajov. Vaše dáta, vaša kontrola, naša zodpovednosť.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                            <rect width="40" height="40" rx="8" fill="url(#gradient6)"/>
+                            <path d="M20 8L26 14H14L20 8Z" fill="white"/>
+                            <path d="M14 16H26V28C26 29.1 25.1 30 24 30H16C14.9 30 14 29.1 14 28V16Z" stroke="white" stroke-width="2"/>
+                            <defs>
+                                <linearGradient id="gradient6" x1="0" y1="0" x2="40" y2="40">
+                                    <stop offset="0%" stop-color="#ffecd2"/>
+                                    <stop offset="100%" stop-color="#fcb69f"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Slovenská podpora</h3>
+                    <p class="feature-description">
+                        Lokálny tím, ktorý rozumie vašim potrebám. Podpora v slovenčine, s pochopením slovenského trhu.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section class="use-cases" id="use-cases">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Riešenia pre <span class="gradient-text">váš priemysel</span></h2>
+                <p class="section-subtitle">WebBridge.ai pomáha firmám naprieč Slovenskom</p>
+            </div>
+            <div class="use-cases-grid">
+                <div class="use-case-card">
+                    <div class="use-case-header">
+                        <div class="use-case-icon">⚖️</div>
+                        <h3 class="use-case-title">Právnické kancelárie</h3>
+                    </div>
+                    <p class="use-case-description">
+                        Okamžitý prístup k tisícom zmlúv, prípadov a právnych dokumentov. AI analyzuje precedenty,
+                        vyhľadáva súvislosti a pomáha pri príprave právnych podaní.
+                    </p>
+                    <ul class="use-case-benefits">
+                        <li>✓ Vyhľadávanie v archívoch za sekundy</li>
+                        <li>✓ Analýza precedentov a súvislostí</li>
+                        <li>✓ Automatické súhrny prípadov</li>
+                        <li>✓ Bezpečnosť klientskych dát</li>
+                    </ul>
+                </div>
+
+                <div class="use-case-card">
+                    <div class="use-case-header">
+                        <div class="use-case-icon">🚚</div>
+                        <h3 class="use-case-title">Logistika a doprava</h3>
+                    </div>
+                    <p class="use-case-description">
+                        Optimalizujte trasy, analyzujte náklady a predpovedajte dopyt. AI pracuje s vašimi
+                        historickými dátami a pomáha rozhodovať sa v reálnom čase.
+                    </p>
+                    <ul class="use-case-benefits">
+                        <li>✓ Predikcia dopytu a optimalizácia zásob</li>
+                        <li>✓ Analýza efektivity trás</li>
+                        <li>✓ Sledovanie nákladov v reálnom čase</li>
+                        <li>✓ Integrácia s existujúcimi WMS</li>
+                    </ul>
+                </div>
+
+                <div class="use-case-card">
+                    <div class="use-case-header">
+                        <div class="use-case-icon">🏢</div>
+                        <h3 class="use-case-title">Interné systémy</h3>
+                    </div>
+                    <p class="use-case-description">
+                        Spristupnite firemné znalosti všetkým zamestnancom. AI odpovedá na otázky z HR,
+                        financií, CRM a ďalších interných databáz - všetko na jednom mieste.
+                    </p>
+                    <ul class="use-case-benefits">
+                        <li>✓ Jednotné rozhranie pre všetky systémy</li>
+                        <li>✓ Inteligentné reporty a dashboardy</li>
+                        <li>✓ Automatizácia rutinných dotazov</li>
+                        <li>✓ Role-based prístupové práva</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Section -->
+    <section class="security" id="security">
+        <div class="container">
+            <div class="security-content">
+                <div class="security-visual">
+                    <div class="security-shield">
+                        <svg width="200" height="240" viewBox="0 0 200 240" fill="none">
+                            <path d="M100 20L180 60V120C180 170 140 210 100 220C60 210 20 170 20 120V60L100 20Z"
+                                  fill="url(#shieldGradient)" opacity="0.1"/>
+                            <path d="M100 20L180 60V120C180 170 140 210 100 220C60 210 20 170 20 120V60L100 20Z"
+                                  stroke="url(#shieldGradient)" stroke-width="3" fill="none"/>
+                            <path d="M70 110L90 130L130 85" stroke="url(#shieldGradient)" stroke-width="6"
+                                  stroke-linecap="round" stroke-linejoin="round"/>
+                            <defs>
+                                <linearGradient id="shieldGradient" x1="20" y1="20" x2="180" y2="220">
+                                    <stop offset="0%" stop-color="#667eea"/>
+                                    <stop offset="100%" stop-color="#764ba2"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <div class="security-particles"></div>
+                </div>
+                <div class="security-info">
+                    <h2 class="section-title">
+                        Bezpečnosť je naša <span class="gradient-text">priorita #1</span>
+                    </h2>
+                    <p class="security-lead">
+                        "Nekradneme dáta, dávame im mozog" nie je len slogan - je to náš záväzok.
+                        Vaše firemné dáta zostávajú tam, kde majú byť: vo vašej databáze.
+                    </p>
+                    <div class="security-features">
+                        <div class="security-item">
+                            <div class="security-item-icon">🔒</div>
+                            <div class="security-item-content">
+                                <h4>End-to-end šifrovanie</h4>
+                                <p>Všetka komunikácia medzi vašou DB a AI je šifrovaná pomocou TLS 1.3</p>
+                            </div>
+                        </div>
+                        <div class="security-item">
+                            <div class="security-item-icon">🛡️</div>
+                            <div class="security-item-content">
+                                <h4>Žiadne ukladanie dát</h4>
+                                <p>Data prechádzajú cez náš systém len v reálnom čase, bez ukladania</p>
+                            </div>
+                        </div>
+                        <div class="security-item">
+                            <div class="security-item-icon">👥</div>
+                            <div class="security-item-content">
+                                <h4>Kontrola prístupov</h4>
+                                <p>Granulárne oprávnenia - kto, kedy a k čomu má prístup</p>
+                            </div>
+                        </div>
+                        <div class="security-item">
+                            <div class="security-item-icon">📋</div>
+                            <div class="security-item-content">
+                                <h4>Audit log</h4>
+                                <p>Kompletný záznam všetkých dotazov a prístupov k dátam</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="contact">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Pripravení dať vašim dátam mozog?</h2>
+                <p class="cta-subtitle">
+                    Začnite s WebBridge.ai ešte dnes. Prvý mesiac zdarma, bez viazanosti.
+                </p>
+                <div class="cta-buttons">
+                    <a href="mailto:info@webbridge.ai" class="btn btn-primary btn-large">
+                        Kontaktujte nás
+                    </a>
+                    <a href="#" class="btn btn-secondary btn-large">
+                        Stiahnuť dokumentáciu
+                    </a>
+                </div>
+                <div class="cta-info">
+                    <div class="cta-info-item">
+                        <span class="cta-info-icon">📧</span>
+                        <span>info@webbridge.ai</span>
+                    </div>
+                    <div class="cta-info-item">
+                        <span class="cta-info-icon">🇸🇰</span>
+                        <span>Made with ❤️ in Slovakia</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <div class="footer-logo">
+                        <span class="logo-icon">⚡</span>
+                        <span class="logo-text">WebBridge<span class="logo-highlight">.ai</span></span>
+                    </div>
+                    <p class="footer-description">
+                        Bezpečné mosty medzi SQL databázami a umelou inteligenciou.
+                        Nekradneme dáta, dávame im mozog.
+                    </p>
+                </div>
+                <div class="footer-column">
+                    <h4 class="footer-title">Produkt</h4>
+                    <ul class="footer-links">
+                        <li><a href="#features">Funkcie</a></li>
+                        <li><a href="#use-cases">Použitie</a></li>
+                        <li><a href="#security">Bezpečnosť</a></li>
+                        <li><a href="#">Ceny</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4 class="footer-title">Spoločnosť</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">O nás</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Kariéra</a></li>
+                        <li><a href="#contact">Kontakt</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4 class="footer-title">Právne</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Ochrana údajov</a></li>
+                        <li><a href="#">Podmienky používania</a></li>
+                        <li><a href="#">GDPR</a></li>
+                        <li><a href="#">Cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 WebBridge.ai. Všetky práva vyhradené.</p>
+                <p>🇸🇰 Slovenské Enterprise AI riešenie</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
