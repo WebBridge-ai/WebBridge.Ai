@@ -53,7 +53,7 @@ html {
 
 body {
     font-family: var(--font-family);
-    background: var(--dark);
+    background: #020617; /* Deeper dark for premium feel */
     color: var(--light);
     line-height: 1.6;
     overflow-x: hidden;
@@ -96,7 +96,13 @@ a {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 var(--spacing-md);
+    padding: 0 1.5rem; /* Mobile-first: px-6 equivalent */
+}
+
+@media (min-width: 768px) {
+    .container {
+        padding: 0 var(--spacing-md);
+    }
 }
 
 .gradient-text {
@@ -417,12 +423,25 @@ a {
     font-size: 1.25rem;
 }
 
-/* Senior Typography */
+/* Senior Typography - Mobile First */
 .hero-title {
     margin-bottom: var(--spacing-md);
     font-weight: 800;
     letter-spacing: -0.02em;
     line-height: 1.1;
+    font-size: 1.875rem; /* text-3xl equivalent for mobile */
+}
+
+@media (min-width: 768px) {
+    .hero-title {
+        font-size: 3rem; /* text-5xl for tablet */
+    }
+}
+
+@media (min-width: 1024px) {
+    .hero-title {
+        font-size: 3.75rem; /* text-6xl for desktop */
+    }
 }
 
 /* Secure Text Gradient */
@@ -500,10 +519,28 @@ a {
 
 .hero-cta {
     display: flex;
+    flex-direction: column; /* Mobile first: stack buttons */
     gap: var(--spacing-sm);
     justify-content: center;
-    flex-wrap: wrap;
+    align-items: stretch;
     margin-bottom: var(--spacing-lg);
+    width: 100%;
+}
+
+.hero-cta .btn {
+    width: 100%; /* Full width on mobile */
+}
+
+@media (min-width: 768px) {
+    .hero-cta {
+        flex-direction: row; /* Side by side on desktop */
+        align-items: center;
+        width: auto;
+    }
+
+    .hero-cta .btn {
+        width: auto; /* Auto width on desktop */
+    }
 }
 
 /* Developer Signature - Code Snippet */
@@ -592,11 +629,38 @@ a {
 }
 
 /* ===================================
+   Section Dividers with Gradients
+   =================================== */
+section {
+    position: relative;
+}
+
+section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(102, 126, 234, 0.3) 50%,
+        transparent 100%);
+}
+
+section:first-of-type::before {
+    display: none;
+}
+
+/* ===================================
    Features Section
    =================================== */
 .features {
     padding: var(--spacing-xl) 0;
-    background: var(--dark-light);
+    background: linear-gradient(180deg,
+        #020617 0%,
+        rgba(15, 23, 42, 0.5) 50%,
+        #020617 100%);
 }
 
 .section-header {
@@ -617,9 +681,21 @@ a {
 
 .features-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: 1fr; /* Mobile first: single column */
     gap: var(--spacing-md);
     margin-top: var(--spacing-lg);
+}
+
+@media (min-width: 768px) {
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on tablet */
+    }
+}
+
+@media (min-width: 1024px) {
+    .features-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns on desktop */
+    }
 }
 
 .feature-card {
@@ -629,6 +705,8 @@ a {
     border-radius: 1rem;
     padding: var(--spacing-md);
     transition: var(--transition);
+    overflow: hidden;
+    min-height: 250px;
 }
 
 .feature-card:hover {
@@ -661,9 +739,21 @@ a {
 
 .use-cases-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: 1fr; /* Mobile first: single column */
     gap: var(--spacing-md);
     margin-top: var(--spacing-lg);
+}
+
+@media (min-width: 768px) {
+    .use-cases-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on tablet */
+    }
+}
+
+@media (min-width: 1024px) {
+    .use-cases-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns on desktop */
+    }
 }
 
 .use-case-card {
@@ -672,6 +762,8 @@ a {
     border-radius: 1rem;
     padding: var(--spacing-md);
     transition: var(--transition);
+    overflow: hidden;
+    min-height: 300px;
 }
 
 .use-case-card:hover {
@@ -1007,11 +1099,7 @@ a {
 
     /* Hero Mobile */
     .bridge-visual {
-        display: none; /* Hide on very small screens */
-    }
-
-    .hero-title {
-        font-size: 2rem;
+        display: none !important; /* Hide bridge on small screens */
     }
 
     .trust-bar {
