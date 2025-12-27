@@ -40,9 +40,85 @@
     <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="hero-background">
+            <!-- Mesh Gradient Layers -->
+            <div class="mesh-gradient"></div>
+            <div class="mesh-gradient-2"></div>
+
+            <!-- Enhanced Grid -->
             <div class="grid-overlay"></div>
             <div class="gradient-overlay"></div>
+
+            <!-- Abstract Bridge Visual -->
+            <div class="bridge-visual">
+                <svg class="bridge-svg" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Database Icon -->
+                    <g class="database-icon" transform="translate(100, 150)">
+                        <rect x="0" y="0" width="80" height="60" rx="8" fill="rgba(102, 126, 234, 0.2)" stroke="url(#glowGradient)" stroke-width="2"/>
+                        <ellipse cx="40" cy="10" rx="30" ry="8" fill="rgba(102, 126, 234, 0.3)" stroke="url(#glowGradient)" stroke-width="2"/>
+                        <line x1="10" y1="10" x2="10" y2="50" stroke="url(#glowGradient)" stroke-width="2"/>
+                        <line x1="70" y1="10" x2="70" y2="50" stroke="url(#glowGradient)" stroke-width="2"/>
+                        <ellipse cx="40" cy="50" rx="30" ry="8" fill="rgba(102, 126, 234, 0.3)" stroke="url(#glowGradient)" stroke-width="2"/>
+                    </g>
+
+                    <!-- Glowing Data Lines -->
+                    <g class="data-flow">
+                        <path class="flow-line flow-line-1" d="M 180 180 Q 400 120, 620 180" stroke="url(#flowGradient)" stroke-width="2" fill="none" stroke-linecap="round"/>
+                        <path class="flow-line flow-line-2" d="M 180 190 Q 400 160, 620 190" stroke="url(#flowGradient)" stroke-width="2" fill="none" stroke-linecap="round"/>
+                        <path class="flow-line flow-line-3" d="M 180 200 Q 400 200, 620 200" stroke="url(#flowGradient)" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+                        <!-- Animated particles -->
+                        <circle class="particle particle-1" r="4" fill="#4facfe">
+                            <animateMotion dur="3s" repeatCount="indefinite">
+                                <mpath href="#path1"/>
+                            </animateMotion>
+                        </circle>
+                        <circle class="particle particle-2" r="4" fill="#00f2fe">
+                            <animateMotion dur="3.5s" repeatCount="indefinite" begin="0.5s">
+                                <mpath href="#path2"/>
+                            </animateMotion>
+                        </circle>
+                        <circle class="particle particle-3" r="4" fill="#667eea">
+                            <animateMotion dur="4s" repeatCount="indefinite" begin="1s">
+                                <mpath href="#path3"/>
+                            </animateMotion>
+                        </circle>
+                    </g>
+
+                    <!-- Hidden paths for particle animation -->
+                    <defs>
+                        <path id="path1" d="M 180 180 Q 400 120, 620 180"/>
+                        <path id="path2" d="M 180 190 Q 400 160, 620 190"/>
+                        <path id="path3" d="M 180 200 Q 400 200, 620 200"/>
+                    </defs>
+
+                    <!-- AI Brain Icon -->
+                    <g class="brain-icon" transform="translate(620, 150)">
+                        <circle cx="40" cy="30" r="35" fill="rgba(75, 172, 254, 0.2)" stroke="url(#glowGradient)" stroke-width="2"/>
+                        <!-- Brain paths -->
+                        <path d="M 25 20 Q 30 15, 35 20 T 45 20" stroke="url(#glowGradient)" stroke-width="2" fill="none"/>
+                        <path d="M 25 30 Q 30 25, 35 30 T 45 30" stroke="url(#glowGradient)" stroke-width="2" fill="none"/>
+                        <path d="M 25 40 Q 30 35, 35 40 T 45 40" stroke="url(#glowGradient)" stroke-width="2" fill="none"/>
+                        <circle cx="30" cy="25" r="2" fill="#4facfe"/>
+                        <circle cx="40" cy="25" r="2" fill="#4facfe"/>
+                        <circle cx="50" cy="25" r="2" fill="#4facfe"/>
+                    </g>
+
+                    <!-- Gradients -->
+                    <defs>
+                        <linearGradient id="glowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#4facfe;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="flowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#667eea;stop-opacity:0.6" />
+                            <stop offset="50%" style="stop-color:#4facfe;stop-opacity:0.8" />
+                            <stop offset="100%" style="stop-color:#00f2fe;stop-opacity:0.6" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
         </div>
+
         <div class="container">
             <div class="hero-content">
                 <div class="hero-badge">
@@ -50,24 +126,45 @@
                     <span>Slovenské Enterprise AI riešenie</span>
                 </div>
                 <h1 class="hero-title">
-                    Nekradneme dáta,<br>
-                    <span class="gradient-text">dávame im mozog</span>
+                    <span class="secure-text">Bezpečne</span> prepájame<br>
+                    vaše dáta s <span class="gradient-text">umelou inteligenciou</span>
                 </h1>
+
+                <!-- Trust Bar -->
+                <div class="trust-bar">
+                    <span class="trust-item">PostgreSQL Optimized</span>
+                    <span class="trust-divider">|</span>
+                    <span class="trust-item">Laravel 11 Ready</span>
+                    <span class="trust-divider">|</span>
+                    <span class="trust-item">Gemini API Integrated</span>
+                </div>
+
                 <p class="hero-subtitle">
-                    Bezpečné mosty medzi vašimi SQL databázami a umelou inteligenciou.
-                    Transformujte firemné dáta na inteligenciu s Gemini API.
+                    Nekradneme dáta, dávame im mozog. Transformujte firemné databázy
+                    na inteligenciu pomocou bezpečných mostov k AI.
                 </p>
+
                 <div class="hero-cta">
-                    <a href="#contact" class="btn btn-primary btn-large">
+                    <a href="#contact" class="btn btn-primary btn-large btn-glass">
                         <span>Vyskúšať demo</span>
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                             <path d="M4 10H16M16 10L10 4M16 10L10 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </a>
-                    <a href="#features" class="btn btn-secondary btn-large">
+                    <a href="#features" class="btn btn-secondary btn-large btn-glass">
                         Zistiť více
                     </a>
                 </div>
+
+                <!-- Developer Signature -->
+                <div class="dev-signature">
+                    <div class="code-snippet">
+                        <span class="code-comment">// Enterprise AI Integration</span><br>
+                        <span class="code-class">WebBridge</span><span class="code-operator">::</span><span class="code-method">connect</span>(<span class="code-string">'internal_db'</span>)<br>
+                        <span class="code-indent">-></span><span class="code-method">powerWith</span>(<span class="code-class">Gemini</span><span class="code-operator">::</span><span class="code-keyword">class</span>);
+                    </div>
+                </div>
+
                 <div class="hero-stats">
                     <div class="stat-item">
                         <div class="stat-value">100%</div>
