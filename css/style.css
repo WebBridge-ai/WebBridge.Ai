@@ -960,6 +960,212 @@ section:first-of-type::before {
 }
 
 /* ===================================
+   Investment Models Section
+   =================================== */
+.investment-models {
+    padding: var(--spacing-xl) 0;
+    background: #020617;
+}
+
+.investment-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+}
+
+@media (min-width: 768px) {
+    .investment-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .investment-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Investment Cards - Minimalist Dark */
+.investment-card {
+    position: relative;
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(102, 126, 234, 0.15);
+    border-radius: 1rem;
+    padding: var(--spacing-lg);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.investment-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.investment-card:hover {
+    border-color: rgba(102, 126, 234, 0.4);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(102, 126, 234, 0.15);
+}
+
+.investment-card:hover::before {
+    opacity: 1;
+}
+
+/* Featured Card (Phase 2) */
+.investment-featured {
+    border-color: rgba(102, 126, 234, 0.3);
+    background: rgba(15, 23, 42, 0.7);
+}
+
+.investment-featured::before {
+    opacity: 0.6;
+}
+
+.investment-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 0.75rem;
+    padding: 0.4rem 1rem;
+    border-radius: 2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.investment-phase {
+    display: inline-block;
+    font-size: 0.75rem;
+    color: rgba(75, 172, 254, 0.8);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: var(--spacing-sm);
+}
+
+.investment-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+    color: #ffffff;
+    line-height: 1.3;
+}
+
+.investment-description {
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.7;
+    margin-bottom: var(--spacing-md);
+    font-size: 0.938rem;
+}
+
+.investment-pricing {
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md) 0;
+    border-top: 1px solid rgba(102, 126, 234, 0.1);
+    border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+.pricing-label {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+}
+
+.pricing-value {
+    font-size: 1rem;
+    color: rgba(75, 172, 254, 0.9);
+    font-weight: 600;
+}
+
+.btn-investment {
+    width: 100%;
+    background: rgba(102, 126, 234, 0.1);
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    color: #ffffff;
+    margin-bottom: var(--spacing-md);
+    transition: all 0.3s ease;
+}
+
+.btn-investment:hover {
+    background: rgba(102, 126, 234, 0.2);
+    border-color: rgba(102, 126, 234, 0.5);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2);
+}
+
+/* ISO Compliance Badge */
+.investment-compliance {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.compliance-icon {
+    color: rgba(75, 172, 254, 0.6);
+}
+
+/* ROI Banner */
+.roi-banner {
+    margin-top: var(--spacing-xl);
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    border-radius: 1rem;
+    padding: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    backdrop-filter: blur(10px);
+}
+
+.roi-icon {
+    color: rgba(75, 172, 254, 0.8);
+    flex-shrink: 0;
+}
+
+.roi-text {
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.roi-text strong {
+    color: rgba(75, 172, 254, 1);
+    font-weight: 700;
+}
+
+@media (max-width: 640px) {
+    .roi-banner {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .investment-badge {
+        top: 0.75rem;
+        right: 0.75rem;
+        font-size: 0.65rem;
+        padding: 0.3rem 0.75rem;
+    }
+
+    .investment-title {
+        font-size: 1.25rem;
+    }
+}
+
+/* ===================================
    CTA Section - Enterprise B2B Card
    =================================== */
 .cta {
