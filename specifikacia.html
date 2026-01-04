@@ -63,32 +63,32 @@
             <div class="toc-card">
                 <h3 class="toc-title">Obsah dokumentácie</h3>
                 <div class="toc-grid">
-                    <a href="#data-privacy" class="toc-item">
+                    <a href="#vector-layer" class="toc-item">
                         <div class="toc-number">01</div>
                         <div class="toc-content">
-                            <h4>Data Privacy</h4>
-                            <p>Zero Data Retention politika</p>
+                            <h4>Vektorová vrstva</h4>
+                            <p>pgvector pre SQL sémantickú analýzu</p>
+                        </div>
+                    </a>
+                    <a href="#security-stack" class="toc-item">
+                        <div class="toc-number">02</div>
+                        <div class="toc-content">
+                            <h4>Security Stack</h4>
+                            <p>TLS 1.3, AES-256, Zero Data Retention</p>
+                        </div>
+                    </a>
+                    <a href="#deployment" class="toc-item">
+                        <div class="toc-number">03</div>
+                        <div class="toc-content">
+                            <h4>Deployment</h4>
+                            <p>Docker, Kubernetes, On-premise</p>
                         </div>
                     </a>
                     <a href="#architecture" class="toc-item">
-                        <div class="toc-number">02</div>
-                        <div class="toc-content">
-                            <h4>Architektúra</h4>
-                            <p>Tok dát a RAG pipeline</p>
-                        </div>
-                    </a>
-                    <a href="#security" class="toc-item">
-                        <div class="toc-number">03</div>
-                        <div class="toc-content">
-                            <h4>Security</h4>
-                            <p>Šifrovanie a prístupové kontroly</p>
-                        </div>
-                    </a>
-                    <a href="#tech-stack" class="toc-item">
                         <div class="toc-number">04</div>
                         <div class="toc-content">
-                            <h4>Tech Stack</h4>
-                            <p>Použité technológie</p>
+                            <h4>Plná Architektúra</h4>
+                            <p>Komplexný prehľad systému</p>
                         </div>
                     </a>
                 </div>
@@ -96,70 +96,280 @@
         </div>
     </section>
 
-    <!-- Data Privacy Section -->
-    <section class="spec-section" id="data-privacy">
+    <!-- Vector Layer Section -->
+    <section class="spec-section" id="vector-layer">
         <div class="container">
             <div class="spec-header">
                 <div class="spec-number">01</div>
-                <h2 class="spec-section-title">Data <span class="gradient-text">Privacy</span></h2>
-                <p class="spec-section-subtitle">Zero Data Retention politika - vaše dáta nikdy neopúšťajú vašu infraštruktúru</p>
+                <h2 class="spec-section-title">Vektorová <span class="gradient-text">vrstva</span></h2>
+                <p class="spec-section-subtitle">Použitie pgvector pre natívnu SQL sémantickú analýzu priamo vo vašej databáze</p>
             </div>
 
             <div class="spec-content">
                 <div class="spec-principle-grid">
                     <div class="spec-principle-card">
-                        <div class="principle-icon">🔒</div>
-                        <h3>Žiadne kopírovanie dát</h3>
-                        <p>WebBridge.ai <strong>nikdy neukláda</strong> vaše firemné dáta na externé servery. Všetky dáta zostávajú výhradne vo vašej databáze a neprechádzajú cez naše systémy na ukladanie.</p>
+                        <div class="principle-icon">🗄️</div>
+                        <h3>pgvector - Native SQL Vector Extension</h3>
+                        <p>WebBridge.ai využíva <strong>pgvector</strong>, open-source PostgreSQL extension pre ukladanie a vyhľadávanie vektorových embeddingov priamo vo vašej databáze. Žiadne externé vector stores nie sú potrebné.</p>
                         <ul class="principle-list">
-                            <li>✓ Real-time prístup bez kopírovania</li>
-                            <li>✓ Dáta sa spracúvajú in-memory</li>
-                            <li>✓ Automatické vymazanie po spracovaní</li>
+                            <li>✓ Native PostgreSQL integrácia</li>
+                            <li>✓ ACID compliance pre vektorové operácie</li>
+                            <li>✓ Podpora pre L2 distance, cosine similarity, inner product</li>
+                            <li>✓ Až 2000 dimenzií na vektor</li>
                         </ul>
                     </div>
 
                     <div class="spec-principle-card">
-                        <div class="principle-icon">🛡️</div>
-                        <h3>GDPR Compliance</h3>
-                        <p>Plná zhoda s nariadením GDPR (General Data Protection Regulation). Implementujeme princípy <em>Privacy by Design</em> a <em>Privacy by Default</em>.</p>
+                        <div class="principle-icon">⚡</div>
+                        <h3>Optimalizované indexovanie</h3>
+                        <p>Pre maximálny výkon používame pokročilé indexovacie algoritmy HNSW (Hierarchical Navigable Small World) a IVFFlat (Inverted File with Flat compression).</p>
                         <ul class="principle-list">
-                            <li>✓ Right to be forgotten (GDPR Article 17)</li>
-                            <li>✓ Data minimization (GDPR Article 5)</li>
-                            <li>✓ Purpose limitation compliance</li>
-                            <li>✓ Transparent data processing</li>
+                            <li>✓ HNSW index pre sub-sekundové vyhľadávanie</li>
+                            <li>✓ IVFFlat pre memory-efficient ukladanie</li>
+                            <li>✓ Automatická optimalizácia query plánov</li>
+                            <li>✓ Podpora pre partial indexing</li>
                         </ul>
                     </div>
 
                     <div class="spec-principle-card">
-                        <div class="principle-icon">📋</div>
-                        <h3>Audit Trail</h3>
-                        <p>Kompletný záznam všetkých prístupov k dátam vrátane časových pečiatok, používateľov a vykonaných operácií.</p>
+                        <div class="principle-icon">🔍</div>
+                        <h3>Sémantické vyhľadávanie v SQL</h3>
+                        <p>Kombinujeme silu tradičného SQL s pokročilým sémantickým vyhľadávaním. Používatelia môžu kombinovať vector similarity s klasickými WHERE klauzulami.</p>
                         <ul class="principle-list">
-                            <li>✓ Immutable audit logs</li>
-                            <li>✓ Timestamp presnosti na milisekundy</li>
-                            <li>✓ User identification & IP tracking</li>
-                            <li>✓ Query history archiving</li>
+                            <li>✓ Hybridné dotazy (SQL + vector similarity)</li>
+                            <li>✓ Filtrovanie pred vector search pre efektivitu</li>
+                            <li>✓ Ranking podľa semantic relevance</li>
+                            <li>✓ Support pre multi-vector queries</li>
                         </ul>
                     </div>
 
                     <div class="spec-principle-card">
-                        <div class="principle-icon">🌍</div>
-                        <h3>Data Residency</h3>
-                        <p>Vaše dáta zostávajú v jurisdikcii, ktorú si zvolíte. Plná podpora pre on-premise deployment a privátne cloudy v EÚ.</p>
+                        <div class="principle-icon">🔄</div>
+                        <h3>Real-time Embedding Pipeline</h3>
+                        <p>Automatická vektorizácia nových dát pri INSERT/UPDATE operáciách pomocou PostgreSQL triggers a background workers.</p>
                         <ul class="principle-list">
-                            <li>✓ EU-only data processing</li>
-                            <li>✓ On-premise deployment option</li>
-                            <li>✓ No third-party data sharing</li>
-                            <li>✓ Sovereign cloud support</li>
+                            <li>✓ Automatické generovanie embeddingov</li>
+                            <li>✓ Asynchronné spracovanie pre high throughput</li>
+                            <li>✓ Incremental updates bez downtime</li>
+                            <li>✓ Custom embedding models support</li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="spec-highlight">
-                    <div class="highlight-icon">⚖️</div>
+                    <div class="highlight-icon">💡</div>
                     <div class="highlight-content">
-                        <h4>Právne záruky</h4>
-                        <p>Poskytujeme zmluvné záruky o dodržiavaní bezpečnostných štandardov vrátane NDA (Non-Disclosure Agreement) a DPA (Data Processing Agreement) pre všetkých enterprise klientov.</p>
+                        <h4>Technická výhoda</h4>
+                        <p>Vďaka pgvector zostávajú vaše dáta a embeddingy v jednej transaktional databáze. To zjednodušuje architektúru, eliminuje synchronizačné problémy a garantuje data consistency pomocou ACID transactions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Security Stack Section -->
+    <section class="spec-section spec-section-dark" id="security-stack">
+        <div class="container">
+            <div class="spec-header">
+                <div class="spec-number">02</div>
+                <h2 class="spec-section-title">Security <span class="gradient-text">Stack</span></h2>
+                <p class="spec-section-subtitle">Multi-layer bezpečnosť: TLS 1.3, AES-256 šifrovanie a Zero Data Retention na strane LLM</p>
+            </div>
+
+            <div class="spec-content">
+                <div class="security-layers">
+                    <div class="security-layer">
+                        <div class="layer-header">
+                            <div class="layer-icon">🔐</div>
+                            <h3>Transport Layer Security (TLS 1.3)</h3>
+                        </div>
+                        <div class="layer-content">
+                            <div class="security-item">
+                                <h4>Modern Cryptographic Protocol</h4>
+                                <p>Všetka komunikácia medzi vašou databázou a WebBridge gateway používa <strong>TLS 1.3</strong> – najnovšiu verziu Transport Layer Security protokolu s vylepšenou bezpečnosťou a výkonom.</p>
+                                <div class="security-specs">
+                                    <span class="spec-tag">TLS 1.3</span>
+                                    <span class="spec-tag">Perfect Forward Secrecy</span>
+                                    <span class="spec-tag">0-RTT Resumption</span>
+                                    <span class="spec-tag">ChaCha20-Poly1305</span>
+                                </div>
+                            </div>
+                            <div class="security-item">
+                                <h4>Cipher Suites</h4>
+                                <p>Podporujeme len moderné, bezpečné cipher suites bez známych zraniteľností. Deprecated algoritmy (SHA-1, RC4, MD5) sú zakázané.</p>
+                                <div class="security-specs">
+                                    <span class="spec-tag">AES-256-GCM</span>
+                                    <span class="spec-tag">AES-128-GCM</span>
+                                    <span class="spec-tag">ECDHE-RSA</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="security-layer">
+                        <div class="layer-header">
+                            <div class="layer-icon">🗝️</div>
+                            <h3>AES-256 Encryption at Rest</h3>
+                        </div>
+                        <div class="layer-content">
+                            <div class="security-item">
+                                <h4>Database Encryption</h4>
+                                <p>Všetky dáta uložené v databáze môžu byť šifrované pomocou <strong>AES-256</strong> v režime GCM (Galois/Counter Mode) s AEAD (Authenticated Encryption with Associated Data).</p>
+                                <div class="security-specs">
+                                    <span class="spec-tag">AES-256</span>
+                                    <span class="spec-tag">GCM Mode</span>
+                                    <span class="spec-tag">AEAD</span>
+                                    <span class="spec-tag">Key Rotation</span>
+                                </div>
+                            </div>
+                            <div class="security-item">
+                                <h4>Key Management</h4>
+                                <p>Enterprise-grade správa šifrovacích kľúčov s podporou pre HSM (Hardware Security Modules) a pravidelnou key rotation.</p>
+                                <div class="security-specs">
+                                    <span class="spec-tag">HSM Support</span>
+                                    <span class="spec-tag">KMS Integration</span>
+                                    <span class="spec-tag">Automated Key Rotation</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="security-layer">
+                        <div class="layer-header">
+                            <div class="layer-icon">🚫</div>
+                            <h3>Zero Data Retention (ZDR) na strane LLM</h3>
+                        </div>
+                        <div class="layer-content">
+                            <div class="security-item">
+                                <h4>Žiadne ukladanie na LLM serveroch</h4>
+                                <p><strong>Zero Data Retention politika:</strong> Vaše dáta sa nikdy neukladajú na serveroch Google Gemini API. Všetky queries sú spracované v reálnom čase a okamžite vymazané po doručení odpovede.</p>
+                                <div class="security-specs">
+                                    <span class="spec-tag">Zero Persistence</span>
+                                    <span class="spec-tag">In-Memory Processing Only</span>
+                                    <span class="spec-tag">No Training on Your Data</span>
+                                    <span class="spec-tag">Immediate Deletion</span>
+                                </div>
+                            </div>
+                            <div class="security-item">
+                                <h4>Contractual Guarantees</h4>
+                                <p>Zmluvné záruky s Google Cloud o nezadržiavaní vašich dát. Vaše dotazy nie sú používané pre trénovanie modelov ani pre iné účely.</p>
+                                <div class="security-specs">
+                                    <span class="spec-tag">DPA (Data Processing Agreement)</span>
+                                    <span class="spec-tag">No Model Training</span>
+                                    <span class="spec-tag">GDPR Compliant</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="spec-highlight">
+                    <div class="highlight-icon">🔒</div>
+                    <div class="highlight-content">
+                        <h4>End-to-End Security</h4>
+                        <p>Od vašej databázy až po LLM response: každý krok je zabezpečený. Dáta sú šifrované v pohybe (TLS 1.3), v pokoji (AES-256) a nikdy nie sú persistované na externých serveroch (ZDR).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Deployment Section -->
+    <section class="spec-section" id="deployment">
+        <div class="container">
+            <div class="spec-header">
+                <div class="spec-number">03</div>
+                <h2 class="spec-section-title">Deployment <span class="gradient-text">Options</span></h2>
+                <p class="spec-section-subtitle">Podpora pre Docker, Kubernetes a izolované On-premise prostredia</p>
+            </div>
+
+            <div class="spec-content">
+                <div class="deployment-grid">
+                    <div class="deployment-card deployment-featured">
+                        <div class="deployment-badge deployment-badge-featured">Recommended</div>
+                        <h4>Docker Containerization</h4>
+                        <p>WebBridge.ai je distribuovaný ako Docker image pripravený na produkčné nasadenie. Všetky závislosti sú zahrnuté.</p>
+                        <div class="code-block">
+                            <code>
+                                <span class="code-comment"># Pull WebBridge image</span><br>
+                                <span class="code-keyword">docker</span> pull webbridge/ai:latest<br><br>
+                                <span class="code-comment"># Run with environment config</span><br>
+                                <span class="code-keyword">docker</span> run -d \<br>
+                                <span class="code-indent">--name webbridge-gateway \</span><br>
+                                <span class="code-indent">-e DATABASE_URL=<span class="code-string">"postgresql://..."</span> \</span><br>
+                                <span class="code-indent">-e GEMINI_API_KEY=<span class="code-string">"..."</span> \</span><br>
+                                <span class="code-indent">-p 8080:8080 \</span><br>
+                                <span class="code-indent">webbridge/ai:latest</span>
+                            </code>
+                        </div>
+                        <ul class="deployment-features">
+                            <li>✓ Official Docker images s security scanning</li>
+                            <li>✓ Multi-architecture support (amd64, arm64)</li>
+                            <li>✓ Health checks a readiness probes</li>
+                            <li>✓ Minimal attack surface (distroless base)</li>
+                        </ul>
+                    </div>
+
+                    <div class="deployment-card">
+                        <div class="deployment-badge">Production-Ready</div>
+                        <h4>Kubernetes Orchestration</h4>
+                        <p>Pre high-availability nasadenia poskytujeme Helm charts a Kubernetes manifests s podporou pre auto-scaling a zero-downtime updates.</p>
+                        <div class="code-block">
+                            <code>
+                                <span class="code-comment"># Install via Helm</span><br>
+                                <span class="code-keyword">helm</span> repo add webbridge https://charts.webbridge.ai<br>
+                                <span class="code-keyword">helm</span> install webbridge webbridge/ai \<br>
+                                <span class="code-indent">--set database.host=<span class="code-string">postgres.internal</span> \</span><br>
+                                <span class="code-indent">--set replicas=<span class="code-number">3</span> \</span><br>
+                                <span class="code-indent">--set autoscaling.enabled=<span class="code-keyword">true</span></span>
+                            </code>
+                        </div>
+                        <ul class="deployment-features">
+                            <li>✓ Horizontal Pod Autoscaling (HPA)</li>
+                            <li>✓ Rolling updates s zero downtime</li>
+                            <li>✓ Resource limits a requests pre cost optimization</li>
+                            <li>✓ Network policies pre micro-segmentation</li>
+                        </ul>
+                    </div>
+
+                    <div class="deployment-card">
+                        <div class="deployment-badge">Air-Gapped</div>
+                        <h4>On-Premise / Isolated Environments</h4>
+                        <p>Plná podpora pre air-gapped prostredia bez prístupu k internetu. Všetky komponenty môžu bežať vo vašom data centre.</p>
+                        <ul class="deployment-features">
+                            <li>✓ Offline installation packages</li>
+                            <li>✓ Private Docker registry support</li>
+                            <li>✓ Custom CA certificates</li>
+                            <li>✓ No external dependencies</li>
+                            <li>✓ VPN tunnel support pre Gemini API</li>
+                            <li>✓ Local LLM fallback option</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="infrastructure-section">
+                    <h3 class="infrastructure-title">Infrastructure Requirements</h3>
+                    <div class="infrastructure-grid">
+                        <div class="infra-item">
+                            <div class="infra-icon">💻</div>
+                            <h4>Compute</h4>
+                            <p>Minimum: 4 vCPU, 8GB RAM<br>Recommended: 8 vCPU, 16GB RAM</p>
+                        </div>
+                        <div class="infra-item">
+                            <div class="infra-icon">💾</div>
+                            <h4>Storage</h4>
+                            <p>SSD storage pre pgvector indexes<br>Minimum: 50GB, Recommended: 200GB+</p>
+                        </div>
+                        <div class="infra-item">
+                            <div class="infra-icon">🌐</div>
+                            <h4>Network</h4>
+                            <p>Low-latency connection k databáze<br>Internet access pre Gemini API (optional VPN)</p>
+                        </div>
+                        <div class="infra-item">
+                            <div class="infra-icon">🗄️</div>
+                            <h4>Database</h4>
+                            <p>PostgreSQL 14+ s pgvector 0.5+<br>Min: 2 vCPU, 4GB RAM dedicated</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -170,8 +380,8 @@
     <section class="spec-section spec-section-dark" id="architecture">
         <div class="container">
             <div class="spec-header">
-                <div class="spec-number">02</div>
-                <h2 class="spec-section-title">Architektúra <span class="gradient-text">systému</span></h2>
+                <div class="spec-number">04</div>
+                <h2 class="spec-section-title">Plná Architektúra <span class="gradient-text">systému</span></h2>
                 <p class="spec-section-subtitle">Privátna RAG architektúra s izolovaným tokom dát</p>
             </div>
 
