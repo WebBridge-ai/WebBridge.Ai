@@ -16,10 +16,10 @@
     <nav class="navbar" id="navbar">
         <div class="container">
             <div class="nav-wrapper">
-                <div class="logo">
+                <a href="" class="logo">
                     <span class="logo-icon">⚡</span>
                     <span class="logo-text">WebBridge<span class="logo-highlight">.ai</span></span>
-                </div>
+                </a>
                 <div class="nav-menu" id="navMenu">
                     <a href="#home" class="nav-link">Domov</a>
                     <a href="#features" class="nav-link">Funkcie</a>
@@ -27,7 +27,7 @@
                     <a href="#security" class="nav-link">Bezpečnosť</a>
                     <a href="specifikacia.html" class="nav-link">Špecifikácia</a>
                     <a href="#contact" class="nav-link">Kontakt</a>
-                    <a href="mailto:info@webbridge.ai?subject=Požiadavka o audit" class="btn btn-primary">Audit</a>
+                    <button class="btn btn-primary btn-demo" id="navDemoBtn">Vyžiadať Demo</button>
                 </div>
                 <button class="mobile-menu-toggle" id="mobileMenuToggle">
                     <span></span>
@@ -52,13 +52,12 @@
             <!-- Abstract Bridge Visual -->
             <div class="bridge-visual">
                 <svg class="bridge-svg" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Database Icon -->
+                    <!-- Data Table Icon -->
                     <g class="database-icon" transform="translate(100, 150)">
                         <rect x="0" y="0" width="80" height="60" rx="8" fill="rgba(102, 126, 234, 0.2)" stroke="url(#glowGradient)" stroke-width="2"/>
-                        <ellipse cx="40" cy="10" rx="30" ry="8" fill="rgba(102, 126, 234, 0.3)" stroke="url(#glowGradient)" stroke-width="2"/>
-                        <line x1="10" y1="10" x2="10" y2="50" stroke="url(#glowGradient)" stroke-width="2"/>
-                        <line x1="70" y1="10" x2="70" y2="50" stroke="url(#glowGradient)" stroke-width="2"/>
-                        <ellipse cx="40" cy="50" rx="30" ry="8" fill="rgba(102, 126, 234, 0.3)" stroke="url(#glowGradient)" stroke-width="2"/>
+                        <svg x="10" y="0" width="60" height="60" viewBox="0 -960 960 960" fill="#667eea">
+                            <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-507h560v-133H200v133Zm0 214h560v-134H200v134Zm0 213h560v-133H200v133Zm40-454v-80h80v80h-80Zm0 214v-80h80v80h-80Zm0 214v-80h80v80h-80Z"/>
+                        </svg>
                     </g>
 
                     <!-- Glowing Data Lines -->
@@ -92,17 +91,15 @@
                         <path id="path3" d="M 180 200 Q 400 200, 620 200"/>
                     </defs>
 
-                    <!-- AI Brain Icon -->
+                    <!-- Network Intelligence Icon -->
                     <g class="brain-icon" transform="translate(620, 150)">
                         <circle cx="40" cy="30" r="35" fill="rgba(75, 172, 254, 0.2)" stroke="url(#glowGradient)" stroke-width="2"/>
-                        <!-- Brain paths -->
-                        <path d="M 25 20 Q 30 15, 35 20 T 45 20" stroke="url(#glowGradient)" stroke-width="2" fill="none"/>
-                        <path d="M 25 30 Q 30 25, 35 30 T 45 30" stroke="url(#glowGradient)" stroke-width="2" fill="none"/>
-                        <path d="M 25 40 Q 30 35, 35 40 T 45 40" stroke="url(#glowGradient)" stroke-width="2" fill="none"/>
-                        <circle cx="30" cy="25" r="2" fill="#4facfe"/>
-                        <circle cx="40" cy="25" r="2" fill="#4facfe"/>
-                        <circle cx="50" cy="25" r="2" fill="#4facfe"/>
+                        <svg x="10" y="0" width="60" height="60" viewBox="0 -960 960 960" fill="#4facfe">
+                            <path d="M323-160q-11 0-20.5-5.5T288-181l-78-139h58l40 80h92v-40h-68l-40-80H188l-57-100q-2-5-3.5-10t-1.5-10q0-4 5-20l57-100h104l40-80h68v-40h-92l-40 80h-58l78-139q5-10 14.5-15.5T323-800h97q17 0 28.5 11.5T460-760v160h-60l-40 40h100v120h-88l-40-80h-92l-40 40h108l40 80h112v200q0 17-11.5 28.5T420-160h-97Zm217 0q-17 0-28.5-11.5T500-200v-200h112l40-80h108l-40-40h-92l-40 80h-88v-120h100l-40-40h-60v-160q0-17 11.5-28.5T540-800h97q11 0 20.5 5.5T672-779l78 139h-58l-40-80h-92v40h68l40 80h104l57 100q2 5 3.5 10t1.5 10q0 4-5 20l-57 100H668l-40 80h-68v40h92l40-80h58l-78 139q-5 10-14.5 15.5T637-160h-97Z"/>
+                        </svg>
                     </g>
+
+
 
                     <!-- Gradients -->
                     <defs>
@@ -127,7 +124,7 @@
                     <span class="version-text">[ v1.0.4 | RAG & Vector Ready ]</span>
                 </div>
                 <h1 class="hero-title">
-                    <span class="gradient-text">WebBridge.AI – Váš bezpečný most do sveta AI</span>
+                    WebBridge.AI – <span class="gradient-text-accent">Váš bezpečný most</span> do sveta AI
                 </h1>
 
                 <!-- Enterprise Trust Bar -->
@@ -145,48 +142,51 @@
                 </p>
 
                 <div class="hero-cta">
-                    <a href="#contact" class="btn btn-primary btn-large btn-glass">
-                        <span>Vyskúšať demo</span>
+                    <button class="btn btn-primary btn-large btn-glass" id="heroDemoBtn">
+                        <span>Vyžiadať Demo</span>
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                             <path d="M4 10H16M16 10L10 4M16 10L10 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
-                    </a>
+                    </button>
                     <a href="#use-cases" class="btn btn-secondary btn-large btn-glass">
                         Prezrieť si Case Studies
                     </a>
                 </div>
 
-                <!-- macOS Terminal Style Code Snippet -->
-                <div class="dev-signature">
-                    <div class="terminal-window">
-                        <div class="terminal-header">
-                            <div class="terminal-buttons">
-                                <span class="terminal-btn terminal-close"></span>
-                                <span class="terminal-btn terminal-minimize"></span>
-                                <span class="terminal-btn terminal-maximize"></span>
+                <!-- Enterprise Tech Showcase - Unified Container -->
+                <div class="tech-showcase">
+                    <!-- macOS Terminal Style Code Snippet -->
+                    <div class="dev-signature">
+                        <div class="terminal-window">
+                            <div class="terminal-header">
+                                <div class="terminal-buttons">
+                                    <span class="terminal-btn terminal-close"></span>
+                                    <span class="terminal-btn terminal-minimize"></span>
+                                    <span class="terminal-btn terminal-maximize"></span>
+                                </div>
+                                <div class="terminal-title">webbridge-integration.php</div>
                             </div>
-                            <div class="terminal-title">webbridge-integration.php</div>
-                        </div>
-                        <div class="code-snippet">
-                            <span class="code-comment">// Enterprise AI Integration</span><br>
-                            <span class="code-class">WebBridge</span><span class="code-operator">::</span><span class="code-method">connect</span>(<span class="code-string">'internal_db'</span>)<br>
-                            <span class="code-indent">-></span><span class="code-method">powerWith</span>(<span class="code-class">Gemini</span><span class="code-operator">::</span><span class="code-keyword">class</span>);
+                            <div class="code-snippet">
+                                <span class="code-comment">// Enterprise AI Integration</span><br>
+                                <span class="code-class">WebBridge</span><span class="code-operator">::</span><span class="code-method">connect</span>(<span class="code-string">'internal_db'</span>)<br>
+                                <span class="code-indent">-></span><span class="code-method">powerWith</span>(<span class="code-class">Gemini</span><span class="code-operator">::</span><span class="code-keyword">class</span>);
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="hero-stats">
-                    <div class="stat-item">
-                        <div class="stat-value">Real-time</div>
-                        <div class="stat-label">Streaming</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">Encrypted</div>
-                        <div class="stat-label">& Private</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">On-Premise</div>
-                        <div class="stat-label">Ready</div>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">Real-time</div>
+                            <div class="stat-label">Streaming</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">Encrypted</div>
+                            <div class="stat-label">& Private</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">On-Premise</div>
+                            <div class="stat-label">Ready</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -619,6 +619,45 @@
             </div>
         </div>
     </footer>
+
+    <!-- Demo Modal -->
+    <div class="demo-modal" id="demoModal">
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="modal-container">
+            <button class="modal-close" id="modalClose">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+            <div class="modal-content">
+                <h2 class="modal-title">Ukážka pre firmy <span class="gradient-text">(Discovery Call)</span></h2>
+                <p class="modal-subtitle">
+                    Radi vám predvedieme možnosti WebBridge na 30-minútovom videohovore.
+                    Vyplňte formulár a my sa vám ozveme s návrhom termínu.
+                </p>
+                <form class="demo-form" id="demoForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                    <div class="form-group">
+                        <label for="name">Meno a priezvisko *</label>
+                        <input type="text" id="name" name="name" required placeholder="Ján Novák">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Firemný email *</label>
+                        <input type="email" id="email" name="email" required placeholder="jan.novak@firma.sk">
+                    </div>
+                    <div class="form-group">
+                        <label for="company">Názov spoločnosti *</label>
+                        <input type="text" id="company" name="company" required placeholder="Vaša firma s.r.o.">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-large btn-submit">
+                        Odoslať žiadosť
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M4 10H16M16 10L10 4M16 10L10 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script src="js/main.js"></script>
 </body>

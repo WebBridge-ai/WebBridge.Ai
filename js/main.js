@@ -333,6 +333,64 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('scroll', debounce(highlightNavigation, 10));
 
     // ===================================
+    // Demo Modal
+    // ===================================
+    const demoModal = document.getElementById('demoModal');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalClose = document.getElementById('modalClose');
+    const navDemoBtn = document.getElementById('navDemoBtn');
+    const heroDemoBtn = document.getElementById('heroDemoBtn');
+    const demoForm = document.getElementById('demoForm');
+
+    // Function to open modal
+    function openDemoModal(e) {
+        e.preventDefault();
+        demoModal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    }
+
+    // Function to close modal
+    function closeDemoModal() {
+        demoModal.classList.remove('active');
+        document.body.style.overflow = ''; // Restore scrolling
+    }
+
+    // Event listeners for demo buttons
+    if (navDemoBtn) {
+        navDemoBtn.addEventListener('click', openDemoModal);
+    }
+
+    if (heroDemoBtn) {
+        heroDemoBtn.addEventListener('click', openDemoModal);
+    }
+
+    if (modalClose) {
+        modalClose.addEventListener('click', closeDemoModal);
+    }
+
+    if (modalOverlay) {
+        modalOverlay.addEventListener('click', closeDemoModal);
+    }
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && demoModal.classList.contains('active')) {
+            closeDemoModal();
+        }
+    });
+
+    // Form submission handling
+    if (demoForm) {
+        demoForm.addEventListener('submit', function(e) {
+            // Form will be handled by Formspree
+            // You can add custom success/error handling here if needed
+            setTimeout(() => {
+                closeDemoModal();
+            }, 1000);
+        });
+    }
+
+    // ===================================
     // Console Easter Egg
     // ===================================
     console.log(`
