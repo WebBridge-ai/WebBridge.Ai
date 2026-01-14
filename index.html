@@ -11,7 +11,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="page-loading">
+    <!-- Intro Overlay -->
+    <div id="intro-overlay">
+        <h1 class="intro-text">
+            <span>Bezpečný most medzi vašimi dátami a</span>
+            <span class="dynamic-word-wrapper">
+                <span class="dynamic-word">AI</span>
+                <span class="dynamic-word">BUDÚCNOSTOU</span>
+                <span class="dynamic-word">ÚSPECHOM</span>
+            </span>
+        </h1>
+    </div>
     <!-- Navigation -->
     <nav class="navbar" id="navbar">
         <div class="container">
@@ -49,71 +60,14 @@
             <div class="grid-overlay"></div>
             <div class="gradient-overlay"></div>
 
-            <!-- Abstract Bridge Visual -->
+            <!-- Dynamic Intro Text Animation -->
             <div class="bridge-visual">
-                <svg class="bridge-svg" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Data Table Icon -->
-                    <g class="database-icon" transform="translate(100, 150)">
-                        <rect x="0" y="0" width="80" height="60" rx="8" fill="rgba(102, 126, 234, 0.2)" stroke="url(#glowGradient)" stroke-width="2"/>
-                        <svg x="10" y="0" width="60" height="60" viewBox="0 -960 960 960" fill="#667eea">
-                            <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-507h560v-133H200v133Zm0 214h560v-134H200v134Zm0 213h560v-133H200v133Zm40-454v-80h80v80h-80Zm0 214v-80h80v80h-80Zm0 214v-80h80v80h-80Z"/>
-                        </svg>
-                    </g>
-
-                    <!-- Glowing Data Lines -->
-                    <g class="data-flow">
-                        <path class="flow-line flow-line-1" d="M 180 180 Q 400 120, 620 180" stroke="url(#flowGradient)" stroke-width="2" fill="none" stroke-linecap="round"/>
-                        <path class="flow-line flow-line-2" d="M 180 190 Q 400 160, 620 190" stroke="url(#flowGradient)" stroke-width="2" fill="none" stroke-linecap="round"/>
-                        <path class="flow-line flow-line-3" d="M 180 200 Q 400 200, 620 200" stroke="url(#flowGradient)" stroke-width="2" fill="none" stroke-linecap="round"/>
-
-                        <!-- Animated particles -->
-                        <circle class="particle particle-1" r="4" fill="#4facfe">
-                            <animateMotion dur="3s" repeatCount="indefinite">
-                                <mpath href="#path1"/>
-                            </animateMotion>
-                        </circle>
-                        <circle class="particle particle-2" r="4" fill="#00f2fe">
-                            <animateMotion dur="3.5s" repeatCount="indefinite" begin="0.5s">
-                                <mpath href="#path2"/>
-                            </animateMotion>
-                        </circle>
-                        <circle class="particle particle-3" r="4" fill="#667eea">
-                            <animateMotion dur="4s" repeatCount="indefinite" begin="1s">
-                                <mpath href="#path3"/>
-                            </animateMotion>
-                        </circle>
-                    </g>
-
-                    <!-- Hidden paths for particle animation -->
-                    <defs>
-                        <path id="path1" d="M 180 180 Q 400 120, 620 180"/>
-                        <path id="path2" d="M 180 190 Q 400 160, 620 190"/>
-                        <path id="path3" d="M 180 200 Q 400 200, 620 200"/>
-                    </defs>
-
-                    <!-- Network Intelligence Icon -->
-                    <g class="brain-icon" transform="translate(620, 150)">
-                        <circle cx="40" cy="30" r="35" fill="rgba(75, 172, 254, 0.2)" stroke="url(#glowGradient)" stroke-width="2"/>
-                        <svg x="10" y="0" width="60" height="60" viewBox="0 -960 960 960" fill="#4facfe">
-                            <path d="M323-160q-11 0-20.5-5.5T288-181l-78-139h58l40 80h92v-40h-68l-40-80H188l-57-100q-2-5-3.5-10t-1.5-10q0-4 5-20l57-100h104l40-80h68v-40h-92l-40 80h-58l78-139q5-10 14.5-15.5T323-800h97q17 0 28.5 11.5T460-760v160h-60l-40 40h100v120h-88l-40-80h-92l-40 40h108l40 80h112v200q0 17-11.5 28.5T420-160h-97Zm217 0q-17 0-28.5-11.5T500-200v-200h112l40-80h108l-40-40h-92l-40 80h-88v-120h100l-40-40h-60v-160q0-17 11.5-28.5T540-800h97q11 0 20.5 5.5T672-779l78 139h-58l-40-80h-92v40h68l40 80h104l57 100q2 5 3.5 10t1.5 10q0 4-5 20l-57 100H668l-40 80h-68v40h92l40-80h58l-78 139q-5 10-14.5 15.5T637-160h-97Z"/>
-                        </svg>
-                    </g>
-
-
-
-                    <!-- Gradients -->
-                    <defs>
-                        <linearGradient id="glowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#4facfe;stop-opacity:1" />
-                        </linearGradient>
-                        <linearGradient id="flowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#667eea;stop-opacity:0.6" />
-                            <stop offset="50%" style="stop-color:#4facfe;stop-opacity:0.8" />
-                            <stop offset="100%" style="stop-color:#00f2fe;stop-opacity:0.6" />
-                        </linearGradient>
-                    </defs>
-                </svg>
+                <div class="intro-text-container">
+                    <h1 class="intro-text">
+                        <span class="intro-static">Bezpečný most medzi vašimi dátami a</span>
+                        <span class="intro-dynamic" id="dynamicWord">AI</span>
+                    </h1>
+                </div>
             </div>
         </div>
 
@@ -124,7 +78,9 @@
                     <span class="version-text">[ v1.0.4 | RAG & Vector Ready ]</span>
                 </div>
                 <h1 class="hero-title">
-                    WebBridge.AI – <span class="gradient-text-accent">Váš bezpečný most</span> do sveta AI
+                    WebBridge.AI
+                    <br>
+                    <span class="gradient-text-accent">Váš bezpečný most</span> do sveta AI
                 </h1>
 
                 <!-- Enterprise Trust Bar -->
@@ -633,9 +589,9 @@
                 <h2 class="modal-title">Ukážka pre firmy <span class="gradient-text">(Discovery Call)</span></h2>
                 <p class="modal-subtitle">
                     Radi vám predvedieme možnosti WebBridge na 30-minútovom videohovore.
-                    Vyplňte formulár a my sa vám ozveme s návrhom termínu.
+                    Vyplňte formulár a my sa vám
                 </p>
-                <form class="demo-form" id="demoForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                <form class="demo-form" id="demoForm" action="https://formspree.io/f/mzdzlwla" method="POST">
                     <div class="form-group">
                         <label for="name">Meno a priezvisko *</label>
                         <input type="text" id="name" name="name" required placeholder="Ján Novák">

@@ -177,7 +177,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Parallax Effect for Hero Background
     // ===================================
     const heroBackground = document.querySelector('.hero-background');
-
     if (heroBackground) {
         window.addEventListener('scroll', function() {
             const scrolled = window.pageYOffset;
@@ -408,7 +407,66 @@ document.addEventListener('DOMContentLoaded', function() {
     'color: #667eea; font-size: 14px; padding: 10px 0;'
     );
 
+    /* --- Intro Animation Logic --- */
+    const overlay = document.getElementById('intro-overlay');
+    const words = document.querySelectorAll('.dynamic-word');
+    if (overlay && words.length > 0) {
+        const wordDisplayTime = 1500; // Time each word is visible
+        const wordTransitionTime = 600; // Must match CSS animation duration
+        let currentIndex = 0;
+
+        function cycleWords() {
+            const currentWord = words[currentIndex];
+
+            // Animate in
+            currentWord.classList.add('active');
+
+            // Animate out after display time
+            setTimeout(() => {
+                currentWord.classList.remove('active');
+                currentWord.classList.add('inactive');
+
+                // If it's the last word, start fading out the overlay
+                if (currentIndex === words.length - 1) {
+                    setTimeout(() => {
+                        overlay.classList.add('hidden');
+                        document.body.classList.remove('page-loading');
+                        overlay.addEventListener('transitionend', () => {
+                            overlay.style.display = 'none';
+                        }, { once: true });
+                    }, wordTransitionTime);
+                } else {
+                    // Move to the next word
+                    currentIndex++;
+                    // Wait for the old word to animate out before animating new one in
+                    setTimeout(cycleWords, wordTransitionTime);
+                }
+            }, wordDisplayTime);
+        }
+
+        // Start the animation cycle after a brief delay
+        setTimeout(cycleWords, 500);
+    } else {
+        document.body.classList.remove('page-loading');
+    }
 });
+
+// ===================================
+// Lazy Loading Images (if needed)
+// ===================================
+if ('loading' in HTMLImageElement.prototype) {
+    // Browser supports native lazy loading
+    const images = document.querySelectorAll('img[loading="lazy"]');
+    images.forEach(img => {
+        img.src = img.dataset.src || img.src;
+    });
+} else {
+    // Fallback for browsers that don't support lazy loading
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js';
+    document.body.appendChild(script);
+}
+
 
 // ===================================
 // Lazy Loading Images (if needed)
