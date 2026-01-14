@@ -1138,14 +1138,33 @@ section:first-of-type::before {
     width: 500px;
     height: 500px;
     margin: 0 auto;
+    display: flex; /* Ensure flex context for mobile stacking */
+    flex-direction: column; /* Mobile first: stack elements vertically */
+    align-items: center; /* Center horizontally */
+    gap: 1.5rem; /* Space between shield and cards on mobile */
 }
 
 .hub-node-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    position: relative; /* Mobile first: relative positioning */
+    top: auto;
+    left: auto;
+    transform: none;
     z-index: 2;
+}
+
+@media (min-width: 769px) { /* md breakpoint and above */
+    .hub-spoke-diagram {
+        flex-direction: row; /* Desktop: row layout */
+        width: 500px; /* Restore fixed width for desktop */
+        height: 500px; /* Restore fixed height for desktop */
+        gap: 0; /* Remove gap as items are absolutely positioned */
+    }
+    .hub-node-container {
+        position: absolute; /* Desktop: absolute positioning */
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
 }
 
 .hub-node {
@@ -1241,12 +1260,9 @@ section:first-of-type::before {
 /* Responsive Hub & Spoke */
 @media (max-width: 768px) {
     .hub-spoke-diagram {
-        width: 100%;
-        height: auto;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 1.5rem;
+        /* Already flex-direction: column; from mobile-first styles */
+        height: auto; /* Allow height to adjust based on content */
+        gap: 1.5rem; /* Space between shield and cards */
     }
     .satellite-nodes {
         position: static;
@@ -1270,11 +1286,11 @@ section:first-of-type::before {
         border: 1px solid rgba(102, 126, 234, 0.2);
         border-radius: 1rem;
         justify-content: flex-start;
+        padding: 0.75rem 1rem;
+        gap: 0.75rem;
     }
-    .satellite-icon {
-        font-size: 1.5rem;
-        width: 40px;
-        height: 40px;
+    .satellite-label {
+        font-size: 0.75rem;
     }
     .connecting-lines {
         display: none;
