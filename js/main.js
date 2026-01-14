@@ -407,6 +407,31 @@ document.addEventListener('DOMContentLoaded', function() {
     'color: #667eea; font-size: 14px; padding: 10px 0;'
     );
 
+    /* --- Security Card Glow Effect --- */
+    const securityCard = document.querySelector('.security-card');
+    if (securityCard) {
+        const spotlight = securityCard.querySelector('.glow-spotlight');
+
+        securityCard.addEventListener('mouseenter', () => {
+            spotlight.style.opacity = 1;
+        });
+
+        securityCard.addEventListener('mouseleave', () => {
+            spotlight.style.opacity = 0;
+        });
+
+        securityCard.addEventListener('mousemove', (e) => {
+            const rect = securityCard.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            window.requestAnimationFrame(() => {
+                spotlight.style.left = `${x}px`;
+                spotlight.style.top = `${y}px`;
+            });
+        });
+    }
+
     /* --- Intro Animation Logic --- */
     const overlay = document.getElementById('intro-overlay');
     const words = document.querySelectorAll('.dynamic-word');

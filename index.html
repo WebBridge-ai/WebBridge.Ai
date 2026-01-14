@@ -14,14 +14,16 @@
 <body class="page-loading">
     <!-- Intro Overlay -->
     <div id="intro-overlay">
-        <h1 class="intro-text">
-            <span>Bezpečný most medzi vašimi dátami a</span>
-            <span class="dynamic-word-wrapper">
-                <span class="dynamic-word">AI</span>
-                <span class="dynamic-word">BUDÚCNOSTOU</span>
-                <span class="dynamic-word">ÚSPECHOM</span>
-            </span>
-        </h1>
+        <div class="intro-node">
+            <h1 class="intro-text">
+                <span>Bezpečný most medzi vašimi dátami a</span>
+                <span class="dynamic-word-wrapper">
+                    <span class="dynamic-word">AI</span>
+                    <span class="dynamic-word">BUDÚCNOSTOU</span>
+                    <span class="dynamic-word">ÚSPECHOM</span>
+                </span>
+            </h1>
+        </div>
     </div>
     <!-- Navigation -->
     <nav class="navbar" id="navbar">
@@ -109,39 +111,40 @@
                     </a>
                 </div>
 
-                <!-- Enterprise Tech Showcase - Unified Container -->
-                <div class="tech-showcase">
-                    <!-- macOS Terminal Style Code Snippet -->
-                    <div class="dev-signature">
-                        <div class="terminal-window">
-                            <div class="terminal-header">
-                                <div class="terminal-buttons">
-                                    <span class="terminal-btn terminal-close"></span>
-                                    <span class="terminal-btn terminal-minimize"></span>
-                                    <span class="terminal-btn terminal-maximize"></span>
-                                </div>
-                                <div class="terminal-title">webbridge-integration.php</div>
+                <!-- n8n-style Workflow Visual -->
+                <div class="workflow-visual">
+                    <div class="workflow-bg"></div>
+                    <div class="workflow-nodes">
+                        <!-- Node A: SQL -->
+                        <div class="workflow-node" id="node-sql">
+                            <div class="node-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
                             </div>
-                            <div class="code-snippet">
-                                <span class="code-comment">// Enterprise AI Integration</span><br>
-                                <span class="code-class">WebBridge</span><span class="code-operator">::</span><span class="code-method">connect</span>(<span class="code-string">'internal_db'</span>)<br>
-                                <span class="code-indent">-></span><span class="code-method">powerWith</span>(<span class="code-class">Gemini</span><span class="code-operator">::</span><span class="code-keyword">class</span>);
-                            </div>
+                            <div class="node-label">Your SQL Database</div>
                         </div>
-                    </div>
 
-                    <div class="hero-stats">
-                        <div class="stat-item">
-                            <div class="stat-value">Real-time</div>
-                            <div class="stat-label">Streaming</div>
+                        <!-- Line 1 -->
+                        <div class="workflow-line">
+                            <div class="data-pulse"></div>
                         </div>
-                        <div class="stat-item">
-                            <div class="stat-value">Encrypted</div>
-                            <div class="stat-label">& Private</div>
+
+                        <!-- Node B: WebBridge -->
+                        <div class="workflow-node" id="node-webbridge">
+                            <div class="node-icon logo-icon">⚡</div>
+                            <div class="node-label">WebBridge.ai Engine</div>
                         </div>
-                        <div class="stat-item">
-                            <div class="stat-value">On-Premise</div>
-                            <div class="stat-label">Ready</div>
+
+                        <!-- Line 2 -->
+                        <div class="workflow-line">
+                            <div class="data-pulse" style="animation-delay: 1.5s;"></div>
+                        </div>
+
+                        <!-- Node C: AI Model -->
+                        <div class="workflow-node" id="node-ai">
+                            <div class="node-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.41 1.41L16.17 10H4v4h12.17l-5.58 5.59L12 21l8-8-8-8z"></path></svg>
+                            </div>
+                            <div class="node-label">AI Model (Gemini)</div>
                         </div>
                     </div>
                 </div>
@@ -340,6 +343,37 @@
         </div>
     </section>
 
+    <!-- Logo Marquee Section -->
+    <section class="logo-marquee">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-subtitle" style="margin-bottom: 2rem;">Podporované technológie</p>
+            </div>
+            <div class="marquee-wrapper">
+                <div class="marquee-content">
+                    <div class="logo-list">
+                        <span title="PostgreSQL"><img src="https://raw.githubusercontent.com/tandpfun/skill-icons/6522c76b3252573f08573427341e0b5e285d9a19/icons/PostgreSQL-Dark.svg" alt="PostgreSQL"></span>
+                        <span title="MySQL"><img src="https://raw.githubusercontent.com/tandpfun/skill-icons/6522c76b3252573f08573427341e0b5e285d9a19/icons/MySQL-Dark.svg" alt="MySQL"></span>
+                        <span title="MariaDB"><img src="https://raw.githubusercontent.com/tandpfun/skill-icons/6522c76b3252573f08573427341e0b5e285d9a19/icons/MariaDB-Dark.svg" alt="MariaDB"></span>
+                        <span title="Laravel"><img src="https://raw.githubusercontent.com/tandpfun/skill-icons/6522c76b3252573f08573427341e0b5e285d9a19/icons/Laravel-Dark.svg" alt="Laravel"></span>
+                        <span title="Google Gemini"><img src="https://raw.githubusercontent.com/tandpfun/skill-icons/6522c76b3252573f08573427341e0b5e285d9a19/icons/Gemini-Dark.svg" alt="Gemini"></span>
+                        <span title="OpenAI"><img src="https://raw.githubusercontent.com/tandpfun/skill-icons/6522c76b3252573f08573427341e0b5e285d9a19/icons/OpenAI-Dark.svg" alt="OpenAI"></span>
+                        <span title="Anthropic Claude"><img src="https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/Anthropic-Dark.svg" alt="Claude"></span>
+                    </div>
+                    <div class="logo-list" aria-hidden="true">
+                        <span title="PostgreSQL"><img src="https://raw.githubusercontent.com/tandpfun/skill-icons/6522c76b3252573f08573427341e0b5e285d9a19/icons/PostgreSQL-Dark.svg" alt="PostgreSQL"></span>
+                        <span title="MySQL"><img src="https://raw.githubusercontent.com/tandpfun/skill-icons/6522c76b3252573f08573427341e0b5e285d9a19/icons/MySQL-Dark.svg" alt="MySQL"></span>
+                        <span title="MariaDB"><img src="https://raw.githubusercontent.com/tandpfun/skill-icons/6522c76b3252573f08573427341e0b5e285d9a19/icons/MariaDB-Dark.svg" alt="MariaDB"></span>
+                        <span title="Laravel"><img src="https://raw.githubusercontent.com/tandpfun/skill-icons/6522c76b3252573f08573427341e0b5e285d9a19/icons/Laravel-Dark.svg" alt="Laravel"></span>
+                        <span title="Google Gemini"><img src="https://raw.githubusercontent.com/tandpfun/skill-icons/6522c76b3252573f08573427341e0b5e285d9a19/icons/Gemini-Dark.svg" alt="Gemini"></span>
+                        <span title="OpenAI"><img src="https://raw.githubusercontent.com/tandpfun/skill-icons/6522c76b3252573f08573427341e0b5e285d9a19/icons/OpenAI-Dark.svg" alt="OpenAI"></span>
+                        <span title="Anthropic Claude"><img src="https://raw.githubusercontent.com/tandpfun/skill-icons/main/icons/Anthropic-Dark.svg" alt="Claude"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Investment Models Section -->
     <section class="investment-models" id="investment">
         <div class="container">
@@ -437,63 +471,69 @@
     <!-- Security Section -->
     <section class="security" id="security">
         <div class="container">
-            <div class="security-content">
-                <div class="security-visual">
-                    <div class="security-shield">
-                        <svg width="200" height="240" viewBox="0 0 200 240" fill="none">
-                            <path d="M100 20L180 60V120C180 170 140 210 100 220C60 210 20 170 20 120V60L100 20Z"
-                                  fill="url(#shieldGradient)" opacity="0.1"/>
-                            <path d="M100 20L180 60V120C180 170 140 210 100 220C60 210 20 170 20 120V60L100 20Z"
-                                  stroke="url(#shieldGradient)" stroke-width="3" fill="none"/>
-                            <path d="M70 110L90 130L130 85" stroke="url(#shieldGradient)" stroke-width="6"
-                                  stroke-linecap="round" stroke-linejoin="round"/>
-                            <defs>
-                                <linearGradient id="shieldGradient" x1="20" y1="20" x2="180" y2="220">
-                                    <stop offset="0%" stop-color="#667eea"/>
-                                    <stop offset="100%" stop-color="#764ba2"/>
-                                </linearGradient>
-                            </defs>
-                        </svg>
+            <div class="security-card">
+                <div class="glow-spotlight"></div>
+                <div class="security-card-content">
+                    <div class="section-header" style="margin-bottom: 4rem;">
+                        <h2 class="section-title">
+                            Bezpečnosť je naša <span class="gradient-text">priorita #1</span>
+                        </h2>
+                        <p class="section-subtitle">
+                            "Nekradneme dáta, dávame im mozog" nie je len slogan - je to náš záväzok.
+                        </p>
                     </div>
-                    <div class="security-particles"></div>
-                </div>
-                <div class="security-info">
-                    <h2 class="section-title">
-                        Bezpečnosť je naša <span class="gradient-text">priorita #1</span>
-                    </h2>
-                    <p class="security-lead">
-                        "Nekradneme dáta, dávame im mozog" nie je len slogan - je to náš záväzok.
-                        Vaše firemné dáta zostávajú tam, kde majú byť: vo vašej databáze.
-                    </p>
-                    <div class="security-features">
-                        <div class="security-item">
-                            <div class="security-item-icon">🔒</div>
-                            <div class="security-item-content">
-                                <h4>End-to-end šifrovanie</h4>
-                                <p>Všetka komunikácia medzi vašou DB a AI je šifrovaná pomocou TLS 1.3</p>
+
+                    <div class="hub-spoke-diagram">
+                        <div class="hub-node-container">
+                            <div class="hub-node">
+                                <div class="hub-icon">
+                                    <svg width="48" height="56" viewBox="0 0 48 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M24 0L48 10V26C48 42 38 52 24 56C10 52 0 42 0 26V10L24 0Z" fill="url(#hub-icon-gradient)"/>
+                                        <path d="M16 26L22 32L32 20" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <defs>
+                                            <linearGradient id="hub-icon-gradient" x1="0" y1="0" x2="48" y2="56" gradientUnits="userSpaceOnUse">
+                                                <stop stop-color="#667eea"/>
+                                                <stop offset="1" stop-color="#764ba2"/>
+                                            </linearGradient>
+                                        </defs>
+                                    </svg>
+                                </div>
                             </div>
                         </div>
-                        <div class="security-item">
-                            <div class="security-item-icon">🛡️</div>
-                            <div class="security-item-content">
-                                <h4>Žiadne ukladanie dát</h4>
-                                <p>Data prechádzajú cez náš systém len v reálnom čase, bez ukladania</p>
+
+                        <div class="satellite-nodes">
+                            <div class="satellite-node" style="--angle: 0deg;">
+                                <div class="satellite-content">
+                                    <div class="satellite-icon">🔒</div>
+                                    <div class="satellite-label">End-to-end šifrovanie</div>
+                                </div>
+                            </div>
+                            <div class="satellite-node" style="--angle: 90deg;">
+                                <div class="satellite-content">
+                                    <div class="satellite-icon">🛡️</div>
+                                    <div class="satellite-label">Zero Data Retention</div>
+                                </div>
+                            </div>
+                            <div class="satellite-node" style="--angle: 180deg;">
+                                <div class="satellite-content">
+                                    <div class="satellite-icon">👥</div>
+                                    <div class="satellite-label">Access Control</div>
+                                </div>
+                            </div>
+                            <div class="satellite-node" style="--angle: 270deg;">
+                                <div class="satellite-content">
+                                    <div class="satellite-icon">📋</div>
+                                    <div class="satellite-label">Audit Log</div>
+                                </div>
                             </div>
                         </div>
-                        <div class="security-item">
-                            <div class="security-item-icon">👥</div>
-                            <div class="security-item-content">
-                                <h4>Kontrola prístupov</h4>
-                                <p>Granulárne oprávnenia - kto, kedy a k čomu má prístup</p>
-                            </div>
-                        </div>
-                        <div class="security-item">
-                            <div class="security-item-icon">📋</div>
-                            <div class="security-item-content">
-                                <h4>Audit log</h4>
-                                <p>Kompletný záznam všetkých dotazov a prístupov k dátam</p>
-                            </div>
-                        </div>
+
+                        <svg class="connecting-lines" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                            <path class="line-flow" d="M250 250 250 70" />
+                            <path class="line-flow" d="M250 250 430 250" />
+                            <path class="line-flow" d="M250 250 250 430" />
+                            <path class="line-flow" d="M250 250 70 250" />
+                        </svg>
                     </div>
                 </div>
             </div>
