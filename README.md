@@ -26,6 +26,6 @@ npm run dev          # náhľad v Remotion Studiu
 npm run render:site  # nové videá a obrázky do ../assets/hero
 ```
 
-Scéna je v `hero-animation/src/WebAiScene.tsx`. Prvé 2 sekundy sa skladá, potom sa v bezšvej slučke striedajú tri ukážky (`stories`) po 10 sekúnd. Každá musí začínať aj končiť rovnakým prázdnym stavom.
+Scéna je v `hero-animation/src/WebAiScene.tsx`. Prvé 2 sekundy sa skladá, potom sa v bezšvej slučke striedajú tri ukážky (`stories`) po 12 sekúnd. Každá musí začínať aj končiť rovnakým prázdnym stavom.
 
 Remotion je pre firmy do 3 zamestnancov zadarmo, pri väčšej firme treba [firemnú licenciu](https://www.remotion.pro/license).

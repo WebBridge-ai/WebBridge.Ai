@@ -21,7 +21,7 @@ const { fontFamily: mono } = loadMono("normal", {
 // identical to frame INTRO and the loop has no visible seam.
 export const FPS = 30;
 export const INTRO_FRAMES = 2 * FPS;
-export const STORY_FRAMES = 10 * FPS;
+export const STORY_FRAMES = 12 * FPS;
 
 const T = {
   typeStart: 15,
@@ -29,12 +29,11 @@ const T = {
   send: 80,
   taskArrives: 108,
   stepsStart: 110,
-  stepFrames: 26,
-  outputEnd: 186,
-  done: 190,
-  solutionLeaves: 192,
-  result: 216,
-  fadeOut: 285,
+  stepFrames: 14,
+  done: 224,
+  solutionLeaves: 226,
+  result: 250,
+  fadeOut: 345,
   end: STORY_FRAMES - 1,
 };
 
@@ -65,15 +64,27 @@ export const TALL: Layout = {
   height: 1920,
   flow: "v",
   web: { x: 150, y: 870, w: 780, h: 450 },
-  ai: { x: 150, y: 1410, w: 780, h: 380 },
+  ai: { x: 150, y: 1405, w: 780, h: 395 },
   k: 1.3,
 };
+
+// The layer every request passes through, in order.
+const LAYERS = [
+  "Access",
+  "Cache",
+  "Router",
+  "RAG",
+  "Prompt",
+  "Tools",
+  "Guardrails",
+  "Observability",
+];
 
 type Story = {
   path: string;
   task: string;
-  steps: string[];
-  output: string;
+  // One value per entry in LAYERS.
+  values: string[];
   result: "reply" | "chart" | "feature";
 };
 
@@ -81,22 +92,46 @@ const stories: Story[] = [
   {
     path: "vasafirma.sk/podpora",
     task: "Kedy mi príde objednávka 4821?",
-    steps: ["Hľadám objednávku", "Overujem stav u dopravcu", "Píšem odpoveď"],
-    output: "objednávka 4821\nstav: u kuriéra\ndoručenie: streda",
+    values: [
+      "rola: zákazník",
+      "miss",
+      "rýchly model",
+      "zásady doručenia",
+      "podpora v12",
+      "orders.find(4821)",
+      "osobné údaje skryté",
+      "1,2 s · 840 tokenov",
+    ],
     result: "reply",
   },
   {
     path: "vasafirma.sk/prehlad",
     task: "Čo sa tento mesiac predáva najlepšie?",
-    steps: ["Čítam objednávky", "Počítam predaje", "Pripravujem graf"],
-    output: "SELECT produkt, SUM(kusy)\nFROM objednavky\nGROUP BY produkt",
+    values: [
+      "rola: manažér",
+      "miss",
+      "analytický model",
+      "schéma databázy",
+      "report v7",
+      "sql.query()",
+      "len na čítanie",
+      "2,4 s · 1 900 tokenov",
+    ],
     result: "chart",
   },
   {
     path: "vasafirma.sk/faktury",
     task: "Pridaj k faktúram export do PDF.",
-    steps: ["Čítam kód aplikácie", "Píšem novú funkciu", "Spúšťam testy"],
-    output: "function exportPdf($faktura) {\n  return Pdf::make($faktura);\n}",
+    values: [
+      "rola: vývojár",
+      "miss",
+      "model na kód",
+      "kód aplikácie",
+      "dev v4",
+      "edit(), testy()",
+      "schválenie človekom",
+      "38 s · 12 400 tokenov",
+    ],
     result: "feature",
   },
 ];
@@ -467,59 +502,83 @@ const WebPanel: React.FC<{
   );
 };
 
-const StepRow: React.FC<{ label: string; index: number; t: number; k: number }> = ({
-  label,
-  index,
-  t,
-  k,
-}) => {
+const LayerChip: React.FC<{
+  label: string;
+  value: string;
+  index: number;
+  t: number;
+  k: number;
+}> = ({ label, value, index, t, k }) => {
   const start = T.stepsStart + index * T.stepFrames;
   const finish = start + T.stepFrames;
   const active = t >= start && t < finish;
   const done = t >= finish;
-  const size = 26 * k;
+  const lit = rise(t, start, start + 5) * (1 - rise(t, finish, finish + 10));
+  const fade = 1 - linear(t, T.fadeOut, T.end);
+  const size = 18 * k;
   return (
     <div
       style={{
         display: "flex",
-        alignItems: "center",
-        gap: 12 * k,
-        color: TEXT,
-        fontSize: 22 * k,
-        opacity: active ? 1 : done ? 0.72 : 0.3,
+        flexDirection: "column",
+        justifyContent: "center",
+        gap: 1 * k,
+        minWidth: 0,
+        padding: `0 ${11 * k}px`,
+        borderRadius: 9 * k,
+        background: `rgba(127, 212, 255, ${0.045 + lit * 0.16})`,
+        border: `1px solid rgba(127, 212, 255, ${0.14 + lit * 0.7})`,
+        boxShadow: `0 0 ${20 * lit}px rgba(127, 212, 255, ${0.5 * lit})`,
       }}
     >
-      <div style={{ width: size, height: size, flexShrink: 0 }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          color: TEXT,
+          fontSize: 19 * k,
+          fontWeight: 600,
+          lineHeight: 1.15,
+          opacity: active ? 1 : 0.55 + (done ? 0.45 * fade : 0),
+        }}
+      >
+        {label}
         {done ? (
-          <Check size={size} color={ICE} />
-        ) : (
+          <div style={{ display: "flex", opacity: fade }}>
+            <Check size={size} color={ICE} />
+          </div>
+        ) : active ? (
           <svg
             width={size}
             height={size}
             viewBox="0 0 24 24"
             fill="none"
-            style={{ rotate: active ? `${(t - start) * 14}deg` : undefined }}
+            style={{ rotate: `${(t - start) * 26}deg` }}
           >
-            <circle
-              cx={12}
-              cy={12}
-              r={9}
+            <path
+              d="M12 3a9 9 0 0 1 9 9"
               stroke={ICE}
-              strokeOpacity={active ? 0.25 : 0.6}
-              strokeWidth={2}
+              strokeWidth={3}
+              strokeLinecap="round"
             />
-            {active ? (
-              <path
-                d="M12 3a9 9 0 0 1 9 9"
-                stroke={ICE}
-                strokeWidth={2.4}
-                strokeLinecap="round"
-              />
-            ) : null}
           </svg>
-        )}
+        ) : null}
       </div>
-      {label}
+      <div
+        style={{
+          color: "#bfe8ff",
+          fontFamily: mono,
+          fontSize: 15.5 * k,
+          lineHeight: 1.25,
+          minHeight: 15.5 * k * 1.25,
+          whiteSpace: "nowrap",
+        }}
+      >
+        <span style={{ opacity: fade }}>
+          {typed(value, t, start + 1, finish - 2)}
+        </span>
+      </div>
     </div>
   );
 };
@@ -531,24 +590,21 @@ const AiPanel: React.FC<{
   intro: number;
 }> = ({ l, story, t, intro }) => {
   const { k, ai } = l;
-  const content = presence(t);
   const working = rise(t, T.taskArrives - 4, T.taskArrives + 8) * (1 - rise(t, T.done - 6, T.done + 12));
   const doneLabel = rise(t, T.done, T.done + 8) * (1 - linear(t, T.fadeOut, T.end));
-  const received = rise(t, T.taskArrives, T.taskArrives + 10);
   const spin = interpolate(t, [T.taskArrives, T.done], [0, 720], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.inOut(Easing.quad),
   });
   const diagonal = Math.hypot(ai.w, ai.h) * 1.1;
-  const ringAngle = t * 5;
   const ring = {
     position: "absolute" as const,
     left: ai.w / 2 - diagonal / 2,
     top: ai.h / 2 - diagonal / 2,
     width: diagonal,
     height: diagonal,
-    rotate: `${ringAngle}deg`,
+    rotate: `${t * 5}deg`,
     background: `conic-gradient(${ICE}, #ffffff 12%, ${AMBER} 30%, transparent 48%, ${ICE} 70%, transparent 86%, ${ICE})`,
   };
 
@@ -597,36 +653,29 @@ const AiPanel: React.FC<{
           background: "#090f17",
           display: "flex",
           flexDirection: "column",
-          padding: `${16 * k}px ${22 * k}px ${18 * k}px`,
-          gap: 14 * k,
+          padding: `${13 * k}px ${14 * k}px`,
+          gap: 10 * k,
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 11 * k }}>
-          <Spark size={30 * k} rotate={spin} scale={1 + working * 0.14} />
-          <div style={{ color: TEXT, fontSize: 25 * k, fontWeight: 600 }}>AI</div>
-          <div
-            style={{
-              flex: 1,
-              minWidth: 0,
-              marginLeft: 6 * k,
-              color: MUTED,
-              fontSize: 19 * k,
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              opacity: received * content,
-            }}
-          >
-            {story.task}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 9 * k,
+            padding: `0 ${4 * k}px`,
+          }}
+        >
+          <Spark size={26 * k} rotate={spin} scale={1 + working * 0.14} />
+          <div style={{ flex: 1, color: TEXT, fontSize: 23 * k, fontWeight: 600 }}>
+            AI vrstva
           </div>
           <div
             style={{
               position: "relative",
               width: 100 * k,
-              height: 28 * k,
+              height: 25 * k,
               fontSize: 19 * k,
               fontWeight: 500,
-              textAlign: "right",
             }}
           >
             <div
@@ -654,36 +703,24 @@ const AiPanel: React.FC<{
 
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 9 * k,
-            opacity: content * received,
-          }}
-        >
-          {story.steps.map((step, i) => (
-            <StepRow key={step} label={step} index={i} t={t} k={k} />
-          ))}
-        </div>
-
-        <div
-          style={{
             flex: 1,
             minHeight: 0,
-            padding: `${12 * k}px ${14 * k}px`,
-            borderRadius: 10 * k,
-            background: "rgba(127, 212, 255, 0.06)",
-            border: "1px solid rgba(127, 212, 255, 0.16)",
-            color: "#bfe8ff",
-            fontFamily: mono,
-            fontSize: 19 * k,
-            lineHeight: 1.4,
-            whiteSpace: "pre-wrap",
-            overflow: "hidden",
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gridTemplateRows: "repeat(4, 1fr)",
+            gap: 6 * k,
           }}
         >
-          <span style={{ opacity: content }}>
-            {typed(story.output, t, T.stepsStart + 6, T.outputEnd)}
-          </span>
+          {LAYERS.map((label, i) => (
+            <LayerChip
+              key={label}
+              label={label}
+              value={story.values[i]}
+              index={i}
+              t={t}
+              k={k}
+            />
+          ))}
         </div>
       </div>
     </div>
