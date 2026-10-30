@@ -1,6 +1,6 @@
 # WebBridge.AI
 
-Minimálna jednostránková prezentácia WebBridge.AI s.r.o. Pôvodný plný web je na vetve `Master`.
+Minimálna jednostránková prezentácia WebBridgeAI s.r.o. Pôvodný plný web je na vetve `Master`.
 
 ## Spustenie
 
