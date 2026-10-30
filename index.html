@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="We build websites and apps and connect them to AI: prompts, RAG, tools, access, guardrails, cache, routing and observability.">
+    <meta name="description" content="We connect your website or app to AI, so it can answer customers, work with your data and take care of routine tasks.">
     <meta name="theme-color" content="#06090f">
     <title>WebBridge.AI – Your bridge to the world of AI</title>
     <link rel="alternate" hreflang="en" href="index.html">
@@ -29,6 +29,9 @@
         <symbol id="i-tools" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z"></path></symbol>
         <symbol id="i-guardrails" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></symbol>
         <symbol id="i-observability" viewBox="0 0 24 24"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></symbol>
+        <symbol id="i-cross" viewBox="0 0 24 24"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></symbol>
+        <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></symbol>
     </svg>
 
     <div class="hero">
@@ -44,7 +47,7 @@
 
         <div class="hero-content">
             <h1>Your bridge to the world of&nbsp;AI.</h1>
-            <p>We build websites and apps and connect them to AI, from RAG and tools to guardrails and observability.</p>
+            <p>We connect your website or app to AI, so it can answer customers, work with your data and take care of routine tasks. No website or app yet? We’ll build it.</p>
             <div class="hero-actions">
                 <a href="mailto:info@webbridge.ai" class="btn">Get in touch</a>
                 <a href="#how" class="btn btn-ghost">How it works</a>
@@ -68,11 +71,7 @@
                             <p class="layer-what">Decides who can use the AI and what each person is allowed to see.</p>
                             <p class="layer-without"><strong>Without it:</strong> One customer’s question could reach another customer’s data.</p>
                         </div>
-                        <div class="layer-example">
-                            <span class="layer-example-label">In our example</span>
-                            <code>role: customer</code>
-                            <span class="layer-example-note">sees only their own orders</span>
-                        </div>
+                        <div class="demo demo-access"><p class="demo-title">A customer can open</p><ul class="demo-rows"><li class="is-ok"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Their own orders</li><li class="is-no"><svg class="icon" aria-hidden="true"><use href="#i-cross"/></svg>Other customers’ orders</li><li class="is-no"><svg class="icon" aria-hidden="true"><use href="#i-cross"/></svg>Internal price lists</li></ul></div>
                     </li>
                     <li class="layer" style="--mix: 14%">
                         <div class="layer-icon"><svg class="icon" aria-hidden="true"><use href="#i-cache"/></svg></div>
@@ -81,11 +80,7 @@
                             <p class="layer-what">Reuses answers to questions it has already handled, saving time and money.</p>
                             <p class="layer-without"><strong>Without it:</strong> You pay the model again for every identical question.</p>
                         </div>
-                        <div class="layer-example">
-                            <span class="layer-example-label">In our example</span>
-                            <code>miss</code>
-                            <span class="layer-example-note">not asked before, so it moves on</span>
-                        </div>
+                        <div class="demo demo-cache"><p class="demo-title">The same question, asked twice</p><div class="demo-bars"><div class="demo-bar"><span>First time</span><i style="--w: 100%"></i><b>1.2 s</b></div><div class="demo-bar"><span>Second time</span><i style="--w: 3%"></i><b>0.02 s</b></div></div></div>
                     </li>
                     <li class="layer" style="--mix: 29%">
                         <div class="layer-icon"><svg class="icon" aria-hidden="true"><use href="#i-router"/></svg></div>
@@ -94,11 +89,7 @@
                             <p class="layer-what">Picks the right model for each task: a fast, cheap one for simple questions and a stronger one for hard problems.</p>
                             <p class="layer-without"><strong>Without it:</strong> Everything runs on one model that is either too expensive or not good enough.</p>
                         </div>
-                        <div class="layer-example">
-                            <span class="layer-example-label">In our example</span>
-                            <code>fast model</code>
-                            <span class="layer-example-note">a simple question needs no more</span>
-                        </div>
+                        <div class="demo demo-router"><p class="demo-title">Each question gets the right model</p><ul class="demo-routes"><li><span>Where is my order?</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg><b>fast model</b></li><li><span>Why did sales drop in May?</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg><b>stronger model</b></li></ul></div>
                     </li>
                     <li class="layer" style="--mix: 43%">
                         <div class="layer-icon"><svg class="icon" aria-hidden="true"><use href="#i-rag"/></svg></div>
@@ -108,11 +99,7 @@
                             <p class="layer-what">Finds the relevant passages in your documents and data and hands them to the model, so it answers from your facts.</p>
                             <p class="layer-without"><strong>Without it:</strong> The model answers from general knowledge and may make things up.</p>
                         </div>
-                        <div class="layer-example">
-                            <span class="layer-example-label">In our example</span>
-                            <code>delivery policy</code>
-                            <span class="layer-example-note">the document behind the answer</span>
-                        </div>
+                        <div class="demo demo-rag"><p class="demo-title">delivery-policy.pdf</p><div class="demo-doc"><i style="--w: 92%"></i><i style="--w: 74%"></i><mark>Orders with a courier arrive within 2 business days.</mark><i style="--w: 84%"></i><i style="--w: 55%"></i></div><p class="demo-tag">used in the answer</p></div>
                     </li>
                     <li class="layer" style="--mix: 57%">
                         <div class="layer-icon"><svg class="icon" aria-hidden="true"><use href="#i-prompt"/></svg></div>
@@ -121,11 +108,7 @@
                             <p class="layer-what">The instructions for the model: its role, tone, rules and answer format. We version them like code.</p>
                             <p class="layer-without"><strong>Without it:</strong> Answers drift over time and nobody knows why.</p>
                         </div>
-                        <div class="layer-example">
-                            <span class="layer-example-label">In our example</span>
-                            <code>support v12</code>
-                            <span class="layer-example-note">the current support instructions</span>
-                        </div>
+                        <div class="demo demo-prompt"><p class="demo-title">support prompt · v12</p><dl class="demo-code"><div><dt>role:</dt><dd>customer support</dd></div><div><dt>tone:</dt><dd>short and friendly</dd></div><div><dt>rule:</dt><dd>never guess a delivery date</dd></div></dl></div>
                     </li>
                     <li class="layer" style="--mix: 71%">
                         <div class="layer-icon"><svg class="icon" aria-hidden="true"><use href="#i-tools"/></svg></div>
@@ -134,11 +117,7 @@
                             <p class="layer-what">Let the AI act instead of only talking: look up an order, query a database, send an email.</p>
                             <p class="layer-without"><strong>Without it:</strong> The AI can tell you what to do, but it can’t do it.</p>
                         </div>
-                        <div class="layer-example">
-                            <span class="layer-example-label">In our example</span>
-                            <code>orders.find(4821)</code>
-                            <span class="layer-example-note">looks the order up in your system</span>
-                        </div>
+                        <div class="demo demo-tools"><p class="demo-title">The AI calls your system</p><div class="demo-code"><code>orders.find(4821)</code></div><dl class="demo-code demo-result"><div><dt>status:</dt><dd>with courier</dd></div><div><dt>arrives:</dt><dd>Wednesday</dd></div></dl></div>
                     </li>
                     <li class="layer" style="--mix: 86%">
                         <div class="layer-icon"><svg class="icon" aria-hidden="true"><use href="#i-guardrails"/></svg></div>
@@ -147,11 +126,7 @@
                             <p class="layer-what">Check what goes in and what comes out: hide personal data, block forbidden actions, ask a person to approve.</p>
                             <p class="layer-without"><strong>Without it:</strong> One bad answer goes straight to your customer.</p>
                         </div>
-                        <div class="layer-example">
-                            <span class="layer-example-label">In our example</span>
-                            <code>personal data hidden</code>
-                            <span class="layer-example-note">the address stays out of the answer</span>
-                        </div>
+                        <div class="demo demo-guardrails"><p class="demo-title">Checked before it reaches the customer</p><p class="demo-text">Your package is going to <span class="demo-redact" role="img" aria-label="address hidden"></span> and arrives on Wednesday.</p><p class="demo-tag"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>address hidden</p></div>
                     </li>
                     <li class="layer" style="--mix: 100%">
                         <div class="layer-icon"><svg class="icon" aria-hidden="true"><use href="#i-observability"/></svg></div>
@@ -160,20 +135,16 @@
                             <p class="layer-what">Records every step, how long it took and what it cost, so problems can be found and quality measured.</p>
                             <p class="layer-without"><strong>Without it:</strong> When the AI gets something wrong, nobody can tell why.</p>
                         </div>
-                        <div class="layer-example">
-                            <span class="layer-example-label">In our example</span>
-                            <code>1.2 s · 840 tokens</code>
-                            <span class="layer-example-note">time and cost of this answer</span>
-                        </div>
+                        <div class="demo demo-observability"><p class="demo-title">One request, step by step</p><div class="demo-trace"><div class="demo-trace-row"><span>Access</span><div><i style="--x: 0%; --w: 5%"></i></div></div><div class="demo-trace-row"><span>RAG</span><div><i style="--x: 5%; --w: 20%"></i></div></div><div class="demo-trace-row"><span>Model</span><div><i style="--x: 25%; --w: 45%"></i></div></div><div class="demo-trace-row"><span>Tools</span><div><i style="--x: 70%; --w: 20%"></i></div></div><div class="demo-trace-row"><span>Guardrails</span><div><i style="--x: 90%; --w: 10%"></i></div></div></div><p class="demo-total">1.2 s · 840 tokens</p></div>
                     </li>
                 </ol>
                 <span class="pipeline-pill pipeline-solution">Solution</span>
             </div>
 
-            <p class="how-note">The values in the example are illustrative.</p>
+            <p class="how-note">The examples are illustrative.</p>
 
             <div class="how-close">
-                <h2>Want this in your application?</h2>
+                <h2>What should AI handle in your business?</h2>
                 <a href="mailto:info@webbridge.ai" class="btn">Get in touch</a>
             </div>
         </section>

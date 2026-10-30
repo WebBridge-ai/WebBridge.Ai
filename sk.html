@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Programujeme weby a aplikácie a prepájame ich s AI: prompty, RAG, tools, prístupy, guardrails, cache, routing a observability.">
+    <meta name="description" content="Prepojíme váš web alebo aplikáciu s AI, aby vedeli odpovedať zákazníkom, pracovať s vašimi dátami a vybavovať rutinnú prácu.">
     <meta name="theme-color" content="#06090f">
     <title>WebBridge.AI – Váš most do sveta AI</title>
     <link rel="alternate" hreflang="en" href="index.html">
@@ -29,6 +29,9 @@
         <symbol id="i-tools" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z"></path></symbol>
         <symbol id="i-guardrails" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></symbol>
         <symbol id="i-observability" viewBox="0 0 24 24"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></symbol>
+        <symbol id="i-cross" viewBox="0 0 24 24"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></symbol>
+        <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></symbol>
     </svg>
 
     <div class="hero">
@@ -44,7 +47,7 @@
 
         <div class="hero-content">
             <h1>Váš most do sveta AI.</h1>
-            <p>Programujeme weby a&nbsp;aplikácie a&nbsp;prepájame ich s&nbsp;AI, od RAG a&nbsp;tools po guardrails a&nbsp;observability.</p>
+            <p>Prepojíme váš web alebo aplikáciu s&nbsp;AI, aby vedeli odpovedať zákazníkom, pracovať s&nbsp;vašimi dátami a&nbsp;vybavovať rutinnú prácu. Ešte ich nemáte? Naprogramujeme ich.</p>
             <div class="hero-actions">
                 <a href="mailto:info@webbridge.ai" class="btn">Ozvite sa</a>
                 <a href="#how" class="btn btn-ghost">Ako to funguje</a>
@@ -68,11 +71,7 @@
                             <p class="layer-what">Určuje, kto môže AI používať a&nbsp;čo smie vidieť.</p>
                             <p class="layer-without"><strong>Bez toho:</strong> Otázka jedného zákazníka sa môže dostať k&nbsp;údajom iného.</p>
                         </div>
-                        <div class="layer-example">
-                            <span class="layer-example-label">V našom príklade</span>
-                            <code>rola: zákazník</code>
-                            <span class="layer-example-note">vidí iba svoje objednávky</span>
-                        </div>
+                        <div class="demo demo-access"><p class="demo-title">Zákazník môže otvoriť</p><ul class="demo-rows"><li class="is-ok"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Svoje objednávky</li><li class="is-no"><svg class="icon" aria-hidden="true"><use href="#i-cross"/></svg>Objednávky iných zákazníkov</li><li class="is-no"><svg class="icon" aria-hidden="true"><use href="#i-cross"/></svg>Interné cenníky</li></ul></div>
                     </li>
                     <li class="layer" style="--mix: 14%">
                         <div class="layer-icon"><svg class="icon" aria-hidden="true"><use href="#i-cache"/></svg></div>
@@ -81,11 +80,7 @@
                             <p class="layer-what">Znova použije odpovede na otázky, ktoré už riešil, a&nbsp;šetrí tak čas aj peniaze.</p>
                             <p class="layer-without"><strong>Bez toho:</strong> Za každú rovnakú otázku platíte model znova.</p>
                         </div>
-                        <div class="layer-example">
-                            <span class="layer-example-label">V našom príklade</span>
-                            <code>miss</code>
-                            <span class="layer-example-note">na toto sa ešte nikto nepýtal, ide sa ďalej</span>
-                        </div>
+                        <div class="demo demo-cache"><p class="demo-title">Rovnaká otázka položená dvakrát</p><div class="demo-bars"><div class="demo-bar"><span>Prvýkrát</span><i style="--w: 100%"></i><b>1,2 s</b></div><div class="demo-bar"><span>Druhýkrát</span><i style="--w: 3%"></i><b>0,02 s</b></div></div></div>
                     </li>
                     <li class="layer" style="--mix: 29%">
                         <div class="layer-icon"><svg class="icon" aria-hidden="true"><use href="#i-router"/></svg></div>
@@ -94,11 +89,7 @@
                             <p class="layer-what">Každej úlohe vyberie správny model: rýchly a&nbsp;lacný na jednoduché otázky, silnejší na náročné problémy.</p>
                             <p class="layer-without"><strong>Bez toho:</strong> Všetko beží na jednom modeli, ktorý je buď drahý, alebo nestačí.</p>
                         </div>
-                        <div class="layer-example">
-                            <span class="layer-example-label">V našom príklade</span>
-                            <code>rýchly model</code>
-                            <span class="layer-example-note">na jednoduchú otázku stačí</span>
-                        </div>
+                        <div class="demo demo-router"><p class="demo-title">Každá otázka dostane správny model</p><ul class="demo-routes"><li><span>Kde je moja objednávka?</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg><b>rýchly model</b></li><li><span>Prečo v&nbsp;máji klesli predaje?</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg><b>silnejší model</b></li></ul></div>
                     </li>
                     <li class="layer" style="--mix: 43%">
                         <div class="layer-icon"><svg class="icon" aria-hidden="true"><use href="#i-rag"/></svg></div>
@@ -108,11 +99,7 @@
                             <p class="layer-what">Nájde relevantné časti vo vašich dokumentoch a&nbsp;dátach a&nbsp;odovzdá ich modelu, takže odpovedá z&nbsp;vašich faktov.</p>
                             <p class="layer-without"><strong>Bez toho:</strong> Model odpovedá zo všeobecných znalostí a&nbsp;môže si vymýšľať.</p>
                         </div>
-                        <div class="layer-example">
-                            <span class="layer-example-label">V našom príklade</span>
-                            <code>zásady doručenia</code>
-                            <span class="layer-example-note">dokument, z&nbsp;ktorého odpoveď vychádza</span>
-                        </div>
+                        <div class="demo demo-rag"><p class="demo-title">zasady-dorucenia.pdf</p><div class="demo-doc"><i style="--w: 92%"></i><i style="--w: 74%"></i><mark>Objednávky u&nbsp;kuriéra dorazia do 2 pracovných dní.</mark><i style="--w: 84%"></i><i style="--w: 55%"></i></div><p class="demo-tag">použité v&nbsp;odpovedi</p></div>
                     </li>
                     <li class="layer" style="--mix: 57%">
                         <div class="layer-icon"><svg class="icon" aria-hidden="true"><use href="#i-prompt"/></svg></div>
@@ -121,11 +108,7 @@
                             <p class="layer-what">Pokyny pre model: jeho rola, tón, pravidlá a&nbsp;formát odpovede. Verzujeme ich ako kód.</p>
                             <p class="layer-without"><strong>Bez toho:</strong> Odpovede sa časom menia a&nbsp;nikto nevie prečo.</p>
                         </div>
-                        <div class="layer-example">
-                            <span class="layer-example-label">V našom príklade</span>
-                            <code>podpora v12</code>
-                            <span class="layer-example-note">aktuálne pokyny pre zákaznícku podporu</span>
-                        </div>
+                        <div class="demo demo-prompt"><p class="demo-title">prompt podpory · v12</p><dl class="demo-code"><div><dt>rola:</dt><dd>zákaznícka podpora</dd></div><div><dt>tón:</dt><dd>stručne a&nbsp;priateľsky</dd></div><div><dt>pravidlo:</dt><dd>nikdy si nevymýšľaj dátum doručenia</dd></div></dl></div>
                     </li>
                     <li class="layer" style="--mix: 71%">
                         <div class="layer-icon"><svg class="icon" aria-hidden="true"><use href="#i-tools"/></svg></div>
@@ -134,11 +117,7 @@
                             <p class="layer-what">AI vďaka nim koná, nielen rozpráva: nájde objednávku, spustí dotaz do databázy, pošle e-mail.</p>
                             <p class="layer-without"><strong>Bez toho:</strong> AI vám povie, čo treba urobiť, ale sama to nespraví.</p>
                         </div>
-                        <div class="layer-example">
-                            <span class="layer-example-label">V našom príklade</span>
-                            <code>orders.find(4821)</code>
-                            <span class="layer-example-note">nájde objednávku vo vašom systéme</span>
-                        </div>
+                        <div class="demo demo-tools"><p class="demo-title">AI zavolá váš systém</p><div class="demo-code"><code>orders.find(4821)</code></div><dl class="demo-code demo-result"><div><dt>stav:</dt><dd>u kuriéra</dd></div><div><dt>doručenie:</dt><dd>streda</dd></div></dl></div>
                     </li>
                     <li class="layer" style="--mix: 86%">
                         <div class="layer-icon"><svg class="icon" aria-hidden="true"><use href="#i-guardrails"/></svg></div>
@@ -147,11 +126,7 @@
                             <p class="layer-what">Kontrolujú, čo ide dnu a&nbsp;čo von: skryjú osobné údaje, zablokujú zakázané akcie, vyžiadajú schválenie človekom.</p>
                             <p class="layer-without"><strong>Bez toho:</strong> Jedna zlá odpoveď ide rovno k&nbsp;zákazníkovi.</p>
                         </div>
-                        <div class="layer-example">
-                            <span class="layer-example-label">V našom príklade</span>
-                            <code>osobné údaje skryté</code>
-                            <span class="layer-example-note">adresa sa do odpovede nedostane</span>
-                        </div>
+                        <div class="demo demo-guardrails"><p class="demo-title">Kontrola skôr, než to uvidí zákazník</p><p class="demo-text">Váš balík ide na adresu <span class="demo-redact" role="img" aria-label="adresa skrytá"></span> a&nbsp;príde v&nbsp;stredu.</p><p class="demo-tag"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>adresa skrytá</p></div>
                     </li>
                     <li class="layer" style="--mix: 100%">
                         <div class="layer-icon"><svg class="icon" aria-hidden="true"><use href="#i-observability"/></svg></div>
@@ -160,20 +135,16 @@
                             <p class="layer-what">Zaznamená každý krok, jeho trvanie aj cenu, takže sa dajú nájsť chyby a&nbsp;merať kvalita.</p>
                             <p class="layer-without"><strong>Bez toho:</strong> Keď sa AI pomýli, nikto nezistí prečo.</p>
                         </div>
-                        <div class="layer-example">
-                            <span class="layer-example-label">V našom príklade</span>
-                            <code>1,2 s · 840 tokenov</code>
-                            <span class="layer-example-note">čas a&nbsp;cena tejto odpovede</span>
-                        </div>
+                        <div class="demo demo-observability"><p class="demo-title">Jedna požiadavka krok za krokom</p><div class="demo-trace"><div class="demo-trace-row"><span>Access</span><div><i style="--x: 0%; --w: 5%"></i></div></div><div class="demo-trace-row"><span>RAG</span><div><i style="--x: 5%; --w: 20%"></i></div></div><div class="demo-trace-row"><span>Model</span><div><i style="--x: 25%; --w: 45%"></i></div></div><div class="demo-trace-row"><span>Tools</span><div><i style="--x: 70%; --w: 20%"></i></div></div><div class="demo-trace-row"><span>Guardrails</span><div><i style="--x: 90%; --w: 10%"></i></div></div></div><p class="demo-total">1,2 s · 840 tokenov</p></div>
                     </li>
                 </ol>
                 <span class="pipeline-pill pipeline-solution">Riešenie</span>
             </div>
 
-            <p class="how-note">Hodnoty v&nbsp;príklade sú ilustračné.</p>
+            <p class="how-note">Ukážky sú ilustračné.</p>
 
             <div class="how-close">
-                <h2>Chcete to vo svojej aplikácii?</h2>
+                <h2>Čo má AI vybavovať vo vašej firme?</h2>
                 <a href="mailto:info@webbridge.ai" class="btn">Ozvite sa</a>
             </div>
         </section>
