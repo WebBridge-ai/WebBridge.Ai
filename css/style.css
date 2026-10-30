@@ -165,7 +165,7 @@ html[lang="sk"].motion .hero-media {
 .hero-content {
     flex: 1;
     text-align: center;
-    padding-top: clamp(1.5rem, 6vh, 4.5rem);
+    padding-top: clamp(1.25rem, 4vh, 3.5rem);
     padding-bottom: 3rem;
     animation: rise 1s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -179,12 +179,16 @@ html[lang="sk"].motion .hero-media {
 }
 
 .hero-content p {
-    max-width: 46rem;
+    max-width: 58rem;
     margin: 1rem auto 0;
     color: var(--text-muted);
-    font-size: clamp(1.1rem, 1rem + 0.35vw, 1.3rem);
+    font-size: clamp(1.05rem, 1rem + 0.2vw, 1.2rem);
     line-height: 1.45;
     text-wrap: balance;
+}
+
+.hero-content p + p {
+    margin-top: 0.4rem;
 }
 
 .hero-actions {
@@ -726,7 +730,7 @@ html[lang="sk"].motion .hero-media {
     .hero-content p {
         max-width: none;
         margin-top: 0.5rem;
-        font-size: 1.1rem;
+        font-size: 1.05rem;
     }
 
     .hero-actions {
@@ -763,8 +767,16 @@ html[lang="sk"].motion .hero-media {
     }
 }
 
-/* Phones: keep the copy above the panels and the footer on one line. */
+/* Phones: the longer copy gets its own room, and the animation starts below it. */
 @media (max-width: 480px) {
+    .hero {
+        min-height: calc(100svh + 4.5rem);
+    }
+
+    .hero-media {
+        top: 4.5rem;
+    }
+
     .hero-content {
         padding-top: 1rem;
     }
@@ -776,6 +788,7 @@ html[lang="sk"].motion .hero-media {
     .hero-content p {
         margin-top: 0.7rem;
         font-size: 1rem;
+        text-wrap: pretty;
     }
 
     .hero-actions {
