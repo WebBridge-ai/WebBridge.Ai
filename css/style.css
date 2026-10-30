@@ -770,11 +770,11 @@ html[lang="sk"].motion .hero-media {
 /* Phones: the longer copy gets its own room, and the animation starts below it. */
 @media (max-width: 480px) {
     .hero {
-        min-height: calc(100svh + 4.5rem);
+        min-height: calc(100svh + 5.5rem);
     }
 
     .hero-media {
-        top: 4.5rem;
+        top: 5.5rem;
     }
 
     .hero-content {
