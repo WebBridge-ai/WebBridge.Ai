@@ -63,20 +63,20 @@ export type Layout = {
 };
 
 export const WIDE: Layout = {
-  width: 1920,
-  height: 1080,
+  width: 1800,
+  height: 600,
   flow: "h",
-  web: { x: 130, y: 480, w: 700, h: 520 },
-  ai: { x: 1090, y: 480, w: 700, h: 520 },
+  web: { x: 70, y: 40, w: 700, h: 520 },
+  ai: { x: 1030, y: 40, w: 700, h: 520 },
   k: 1.32,
 };
 
 export const TALL: Layout = {
-  width: 1080,
-  height: 1920,
+  width: 900,
+  height: 1000,
   flow: "v",
-  web: { x: 150, y: 870, w: 780, h: 450 },
-  ai: { x: 150, y: 1405, w: 780, h: 395 },
+  web: { x: 40, y: 30, w: 820, h: 450 },
+  ai: { x: 40, y: 565, w: 820, h: 395 },
   k: 1.3,
 };
 
@@ -1061,7 +1061,7 @@ export const WebAiScene: React.FC<{ layout: Layout; lang: Lang }> = ({
         }}
       />
       {/* Fades every edge to the page colour, so the video has no visible border. */}
-      <AbsoluteFill style={{ boxShadow: `inset 0 0 110px 50px ${INK}` }} />
+      <AbsoluteFill style={{ boxShadow: `inset 0 0 60px 20px ${INK}` }} />
       <Threads l={l} t={t} drawIn={drawIn} />
       <WebPanel l={l} story={story} copy={copy} t={t} intro={intro} />
       <AiPanel l={l} story={story} copy={copy} t={t} intro={intro} />
