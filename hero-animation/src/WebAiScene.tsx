@@ -1,653 +1,903 @@
-import { useMemo } from "react";
+import { loadFont as loadSans } from "@remotion/google-fonts/BricolageGrotesque";
+import { loadFont as loadMono } from "@remotion/google-fonts/JetBrainsMono";
 import {
   AbsoluteFill,
   Easing,
   interpolate,
-  random,
   useCurrentFrame,
 } from "remotion";
 
-// Timeline: an intro that builds the scene once, then a loop of LOOP_FRAMES.
-// Everything that keeps moving after the intro is periodic in LOOP_FRAMES
-// (integer cycle counts only), so frame INTRO_FRAMES + LOOP_FRAMES is identical
-// to frame INTRO_FRAMES and the loop has no visible seam.
+const { fontFamily: sans } = loadSans("normal", {
+  weights: ["400", "500", "600"],
+  subsets: ["latin", "latin-ext"],
+});
+const { fontFamily: mono } = loadMono("normal", {
+  weights: ["400"],
+  subsets: ["latin", "latin-ext"],
+});
+
+// Timeline: a short intro builds the two panels, then three stories loop. Every
+// story starts and ends on the same empty state, so frame INTRO + LOOP is
+// identical to frame INTRO and the loop has no visible seam.
 export const FPS = 30;
-export const INTRO_FRAMES = 4 * FPS;
-export const LOOP_FRAMES = 12 * FPS;
+export const INTRO_FRAMES = 2 * FPS;
+export const STORY_FRAMES = 10 * FPS;
+
+const T = {
+  typeStart: 15,
+  typeEnd: 75,
+  send: 80,
+  taskArrives: 108,
+  stepsStart: 110,
+  stepFrames: 26,
+  outputEnd: 186,
+  done: 190,
+  solutionLeaves: 192,
+  result: 216,
+  fadeOut: 285,
+  end: STORY_FRAMES - 1,
+};
 
 type Rect = { x: number; y: number; w: number; h: number };
 
 export type Layout = {
   width: number;
   height: number;
-  // "h": the web sits left of the AI field, "v": the web sits above it.
+  // "h": the web sits left of the AI, "v": the web sits above it.
   flow: "h" | "v";
   web: Rect;
-  ai: { cx: number; cy: number; rx: number; ry: number; nodes: number };
-  threads: number;
+  ai: Rect;
+  // Text and spacing scale.
+  k: number;
 };
 
 export const WIDE: Layout = {
   width: 1920,
   height: 1080,
   flow: "h",
-  web: { x: 170, y: 440, w: 640, h: 530 },
-  ai: { cx: 1400, cy: 705, rx: 340, ry: 270, nodes: 420 },
-  threads: 12,
+  web: { x: 130, y: 480, w: 700, h: 520 },
+  ai: { x: 1090, y: 480, w: 700, h: 520 },
+  k: 1.32,
 };
 
 export const TALL: Layout = {
   width: 1080,
   height: 1920,
   flow: "v",
-  web: { x: 140, y: 950, w: 800, h: 310 },
-  ai: { cx: 540, cy: 1600, rx: 410, ry: 180, nodes: 340 },
-  threads: 10,
+  web: { x: 150, y: 870, w: 780, h: 450 },
+  ai: { x: 150, y: 1410, w: 780, h: 380 },
+  k: 1.3,
 };
+
+type Story = {
+  path: string;
+  task: string;
+  steps: string[];
+  output: string;
+  result: "reply" | "chart" | "feature";
+};
+
+const stories: Story[] = [
+  {
+    path: "vasafirma.sk/podpora",
+    task: "Kedy mi príde objednávka 4821?",
+    steps: ["Hľadám objednávku", "Overujem stav u dopravcu", "Píšem odpoveď"],
+    output: "objednávka 4821\nstav: u kuriéra\ndoručenie: streda",
+    result: "reply",
+  },
+  {
+    path: "vasafirma.sk/prehlad",
+    task: "Čo sa tento mesiac predáva najlepšie?",
+    steps: ["Čítam objednávky", "Počítam predaje", "Pripravujem graf"],
+    output: "SELECT produkt, SUM(kusy)\nFROM objednavky\nGROUP BY produkt",
+    result: "chart",
+  },
+  {
+    path: "vasafirma.sk/faktury",
+    task: "Pridaj k faktúram export do PDF.",
+    steps: ["Čítam kód aplikácie", "Píšem novú funkciu", "Spúšťam testy"],
+    output: "function exportPdf($faktura) {\n  return Pdf::make($faktura);\n}",
+    result: "feature",
+  },
+];
+
+export const LOOP_FRAMES = STORY_FRAMES * stories.length;
 
 const AMBER = "#ffb454";
 const ICE = "#7fd4ff";
-const TAU = Math.PI * 2;
+const INK = "#06090f";
+const TEXT = "#eef2f8";
+const MUTED = "#8b97a8";
 
-const rise = (frame: number, from: number, to: number) =>
-  interpolate(frame, [from, to], [0, 1], {
+const rise = (t: number, from: number, to: number) =>
+  interpolate(t, [from, to], [0, 1], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
     easing: Easing.bezier(0.16, 1, 0.3, 1),
   });
 
-// Whole-number `cycles` per loop keep every value seamless across the loop point.
-const cycle = (frame: number, cycles: number, phase: number) => {
-  const value = (cycles * frame) / LOOP_FRAMES + phase;
-  return value - Math.floor(value);
-};
-
-const wave = (frame: number, cycles: number, phase: number) =>
-  Math.sin(TAU * cycle(frame, cycles, phase));
-
-// Flares when a pulse reaches the end of its thread and decays after it wraps.
-const arrival = (progress: number) =>
-  Math.max(
-    Math.exp(-progress * 11),
-    interpolate(progress, [0.975, 1], [0, 1], {
-      extrapolateLeft: "clamp",
-      extrapolateRight: "clamp",
-    }),
-  );
-
-type Node = {
-  x: number;
-  y: number;
-  r: number;
-  size: number;
-  wobble: number;
-  cycles: number;
-  phase: number;
-};
-
-const buildNodes = (l: Layout): Node[] =>
-  Array.from({ length: l.ai.nodes }, (_, i) => {
-    const r = Math.sqrt((i + 0.5) / l.ai.nodes);
-    const angle = i * 2.39996;
-    return {
-      x:
-        l.ai.cx +
-        l.ai.rx * r * Math.cos(angle) +
-        (random(`jx-${i}`) - 0.5) * 5,
-      y:
-        l.ai.cy +
-        l.ai.ry * r * Math.sin(angle) +
-        (random(`jy-${i}`) - 0.5) * 5,
-      r,
-      size: 0.9 + random(`size-${i}`) * random(`size2-${i}`) * 2.8,
-      wobble: 2 + random(`wobble-${i}`) * 4,
-      cycles: 1 + Math.floor(random(`cycles-${i}`) * 2),
-      phase: random(`phase-${i}`),
-    };
+const linear = (t: number, from: number, to: number) =>
+  interpolate(t, [from, to], [0, 1], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
   });
 
-const buildLinks = (nodes: Node[]) => {
-  const links = new Set<string>();
-  nodes.forEach((a, i) => {
-    nodes
-      .map((b, j) => ({ j, d: (a.x - b.x) ** 2 + (a.y - b.y) ** 2 }))
-      .filter(({ j }) => j !== i)
-      .sort((p, q) => p.d - q.d)
-      .slice(0, 3)
-      .forEach(({ j }) => links.add(`${Math.min(i, j)}-${Math.max(i, j)}`));
-  });
-  return [...links].map((link) => link.split("-").map(Number));
-};
+// Visible share of a story's content; zero on the shared empty state.
+const presence = (t: number) =>
+  linear(t, 0, 10) * (1 - linear(t, T.fadeOut, T.end));
 
-type Thread = {
-  d: string;
-  port: { x: number; y: number };
-  target: number;
-  cycles: number;
-  phase: number;
-};
+const typed = (text: string, t: number, from: number, to: number) =>
+  text.slice(0, Math.floor(linear(t, from, to) * text.length));
 
-const buildThreads = (l: Layout, nodes: Node[]): Thread[] => {
-  const horizontal = l.flow === "h";
-  // Routes are written as (u: along the flow, v: across it).
-  const pt = (u: number, v: number) => (horizontal ? `${u} ${v}` : `${v} ${u}`);
-  const start = horizontal ? l.web.x + l.web.w : l.web.y + l.web.h;
-  const from = horizontal ? l.web.y + 84 : l.web.x + 36;
-  const to = horizontal ? l.web.y + l.web.h - 34 : l.web.x + l.web.w - 36;
-  const mid = (from + to) / 2;
-  const end = horizontal ? l.ai.cx - l.ai.rx : l.ai.cy - l.ai.ry;
-  const middle = (l.threads - 1) / 2;
+const Check: React.FC<{ size: number; color: string }> = ({ size, color }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+    <path
+      d="M5 12.5 10 17.5 19 7"
+      stroke={color}
+      strokeWidth={2.6}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
 
-  return Array.from({ length: l.threads }, (_, i) => {
-    const v0 = from + ((to - from) * i) / (l.threads - 1);
-    const v1 = mid + (v0 - mid) * 0.62;
-    const jog = Math.abs(i - middle) * ((end - start) * 0.022);
-    const u1 = start + (end - start) * 0.08 + jog;
-    const u2 = u1 + Math.abs(v1 - v0);
-    const u3 = u2 + (end - start) * 0.1;
+const Spark: React.FC<{ size: number; rotate: number; scale: number }> = ({
+  size,
+  rotate,
+  scale,
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    style={{ rotate: `${rotate}deg`, scale }}
+  >
+    <path
+      d="M12 1.5C13 8 16 11 22.5 12 16 13 13 16 12 22.5 11 16 8 13 1.5 12 8 11 11 8 12 1.5Z"
+      fill={ICE}
+    />
+  </svg>
+);
 
-    // Each rigid trace lands on the field node closest to its spot on the rim.
-    const a = interpolate(i, [0, l.threads - 1], [-0.92, 0.92]);
-    const rimX = horizontal
-      ? l.ai.cx - l.ai.rx * Math.cos(a) * 0.86
-      : l.ai.cx + l.ai.rx * Math.sin(a) * 0.86;
-    const rimY = horizontal
-      ? l.ai.cy + l.ai.ry * Math.sin(a) * 0.86
-      : l.ai.cy - l.ai.ry * Math.cos(a) * 0.86;
-    let target = 0;
-    nodes.forEach((n, j) => {
-      const best = nodes[target];
-      if ((n.x - rimX) ** 2 + (n.y - rimY) ** 2 < (best.x - rimX) ** 2 + (best.y - rimY) ** 2) {
-        target = j;
-      }
-    });
+const WebResult: React.FC<{ story: Story; t: number; k: number }> = ({
+  story,
+  t,
+  k,
+}) => {
+  const shown = rise(t, T.result, T.result + 16);
+  const lift = { opacity: shown, translate: `0 ${(1 - shown) * 12 * k}px` };
 
-    const node = nodes[target];
-    const uT = horizontal ? node.x : node.y;
-    const vT = horizontal ? node.y : node.x;
-    const pull = (uT - u3) * 0.48;
-    return {
-      d: `M ${pt(start, v0)} L ${pt(u1, v0)} L ${pt(u2, v1)} L ${pt(u3, v1)} C ${pt(u3 + pull, v1)} ${pt(uT - pull, vT)} ${pt(uT, vT)}`,
-      port: horizontal ? { x: start, y: v0 } : { x: v0, y: start },
-      target,
-      cycles: 2 + Math.floor(random(`thread-c-${i}`) * 2),
-      phase: random(`thread-p-${i}`),
-    };
-  });
-};
+  if (story.result === "reply") {
+    return (
+      <div style={{ ...lift, display: "flex", flexDirection: "column", gap: 12 * k }}>
+        <div
+          style={{
+            alignSelf: "flex-start",
+            padding: `${12 * k}px ${16 * k}px`,
+            borderRadius: 14 * k,
+            background: "rgba(127, 212, 255, 0.12)",
+            border: "1px solid rgba(127, 212, 255, 0.35)",
+            color: TEXT,
+            fontSize: 24 * k,
+            lineHeight: 1.3,
+          }}
+        >
+          Balík je na ceste. Doručíme ho v&nbsp;stredu.
+        </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 6 * k,
+            color: ICE,
+            fontSize: 20 * k,
+            fontWeight: 500,
+          }}
+        >
+          <Check size={22 * k} color={ICE} />
+          Vyriešené
+        </div>
+      </div>
+    );
+  }
 
-const Backdrop: React.FC<{ l: Layout; frame: number }> = ({ l, frame }) => {
-  const on = rise(frame, 0, 50);
-  const { web, ai } = l;
-  return (
-    <g opacity={on}>
-      <defs>
-        <pattern id="grid" width={48} height={48} patternUnits="userSpaceOnUse">
-          <path
-            d="M 48 0 H 0 V 48"
-            fill="none"
-            stroke="#ffc98a"
-            strokeOpacity={0.1}
-            strokeWidth={1}
-          />
-        </pattern>
-        <radialGradient id="grid-fade">
-          <stop offset="0.25" stopColor="white" stopOpacity={1} />
-          <stop offset="1" stopColor="white" stopOpacity={0} />
-        </radialGradient>
-        <mask id="grid-mask">
-          <ellipse
-            cx={web.x + web.w / 2}
-            cy={web.y + web.h / 2}
-            rx={web.w * 0.95}
-            ry={web.h * 1.1}
-            fill="url(#grid-fade)"
-          />
-        </mask>
-        <radialGradient id="web-glow">
-          <stop offset="0" stopColor={AMBER} stopOpacity={0.15} />
-          <stop offset="1" stopColor={AMBER} stopOpacity={0} />
-        </radialGradient>
-        <radialGradient id="ai-glow">
-          <stop offset="0" stopColor={ICE} stopOpacity={0.3} />
-          <stop offset="0.5" stopColor={ICE} stopOpacity={0.09} />
-          <stop offset="1" stopColor={ICE} stopOpacity={0} />
-        </radialGradient>
-      </defs>
-      <ellipse
-        cx={web.x + web.w / 2}
-        cy={web.y + web.h / 2}
-        rx={web.w * 0.95}
-        ry={web.h * 1.05}
-        fill="url(#web-glow)"
-      />
-      <rect
-        width={l.width}
-        height={l.height}
-        fill="url(#grid)"
-        mask="url(#grid-mask)"
-      />
-      <ellipse
-        cx={ai.cx}
-        cy={ai.cy}
-        rx={ai.rx * 1.35}
-        ry={ai.ry * 1.35}
-        fill="url(#ai-glow)"
-        opacity={0.85 + 0.15 * wave(frame, 2, 0)}
-      />
-    </g>
-  );
-};
-
-type Block = {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  rx: number;
-  kind: "panel" | "bar" | "button";
-};
-
-// A generic page wireframe, laid out in fractions so it fits both cuts.
-const buildBlocks = (web: Rect): Block[] => {
-  const top = web.y + 46;
-  const body = web.h - 46;
-  const block = (
-    fx: number,
-    fy: number,
-    fw: number,
-    fh: number,
-    kind: Block["kind"],
-  ): Block => ({
-    x: web.x + web.w * fx,
-    y: top + body * fy,
-    w: web.w * fw,
-    h: body * fh,
-    rx: kind === "panel" ? 8 : Math.min(body * fh, web.w * fw) / 2,
-    kind,
-  });
-  return [
-    block(0.05, 0.06, 0.13, 0.035, "bar"),
-    block(0.62, 0.065, 0.08, 0.025, "bar"),
-    block(0.73, 0.065, 0.08, 0.025, "bar"),
-    block(0.84, 0.065, 0.1, 0.025, "bar"),
-    block(0.05, 0.19, 0.4, 0.05, "bar"),
-    block(0.05, 0.27, 0.3, 0.05, "bar"),
-    block(0.05, 0.375, 0.42, 0.018, "bar"),
-    block(0.05, 0.415, 0.36, 0.018, "bar"),
-    block(0.05, 0.485, 0.16, 0.055, "button"),
-    block(0.54, 0.17, 0.41, 0.4, "panel"),
-    block(0.05, 0.65, 0.28, 0.29, "panel"),
-    block(0.36, 0.65, 0.28, 0.29, "panel"),
-    block(0.67, 0.65, 0.28, 0.29, "panel"),
-  ];
-};
-
-// The chart and the cards inside the wireframe, reacting to the same responses.
-const PanelDetails: React.FC<{
-  blocks: Block[];
-  frame: number;
-  threads: Thread[];
-}> = ({ blocks, frame, threads }) => {
-  const chart = blocks[9];
-  const cards = blocks.slice(10, 13);
-  const appear = rise(frame, 66, 96);
-  const pad = chart.w * 0.07;
-  const points = Array.from({ length: 19 }, (_, i) => {
-    const t = i / 18;
-    const value =
-      0.42 +
-      t * 0.26 +
-      0.09 * wave(frame, 1, t * 1.4) +
-      0.05 * wave(frame, 2, t * 3.1 + 0.3);
-    return {
-      x: chart.x + pad + (chart.w - 2 * pad) * t,
-      y: chart.y + chart.h - pad - (chart.h - 2 * pad) * value,
-    };
-  });
-  const line = points.map((p) => `${p.x},${p.y}`).join(" ");
-  const base = chart.y + chart.h - pad;
-  return (
-    <g opacity={appear}>
-      <polygon
-        points={`${chart.x + pad},${base} ${line} ${chart.x + chart.w - pad},${base}`}
-        fill={AMBER}
-        fillOpacity={0.09}
-      />
-      <polyline
-        points={line}
-        fill="none"
-        stroke={AMBER}
-        strokeOpacity={0.9}
-        strokeWidth={1.8}
-        strokeLinejoin="round"
-      />
-      {cards.map((card, i) => {
-        const thread = threads[(10 + i) % threads.length];
-        const flash = arrival(cycle(frame, thread.cycles, thread.phase + 0.5));
-        const inset = Math.min(card.w, card.h) * 0.14;
-        const dot = Math.min(card.h * 0.13, 15);
-        const lineY = card.y + inset + dot * 2 + card.h * 0.1;
-        return (
-          <g key={i}>
-            <circle
-              cx={card.x + inset + dot}
-              cy={card.y + inset + dot}
-              r={dot}
-              fill={AMBER}
-              fillOpacity={0.3 + flash * 0.7}
-            />
-            {[0.72, 0.5].map((width, row) => (
-              <rect
-                key={row}
-                x={card.x + inset}
-                y={lineY + row * card.h * 0.13}
-                width={(card.w - 2 * inset) * width}
-                height={Math.max(3, card.h * 0.045)}
-                rx={2}
-                fill="#ffe7c9"
-                fillOpacity={0.18 + flash * 0.6}
-              />
-            ))}
-          </g>
-        );
-      })}
-    </g>
-  );
-};
-
-const WebSide: React.FC<{
-  l: Layout;
-  frame: number;
-  threads: Thread[];
-}> = ({ l, frame, threads }) => {
-  const { web } = l;
-  const blocks = buildBlocks(web);
-  const frameIn = rise(frame, 0, 34);
-  const chromeIn = rise(frame, 18, 40);
-  const headingBar = blocks[5];
-  return (
-    <g>
-      <rect
-        x={web.x}
-        y={web.y}
-        width={web.w}
-        height={web.h}
-        rx={14}
-        fill="#0b0f16"
-        fillOpacity={frameIn * 0.92}
-        stroke="#ffcf96"
-        strokeOpacity={0.65}
-        strokeWidth={1.5}
-        pathLength={1}
-        strokeDasharray="1 1"
-        strokeDashoffset={1 - frameIn}
-      />
-      <g opacity={chromeIn}>
-        <line
-          x1={web.x}
-          y1={web.y + 46}
-          x2={web.x + web.w}
-          y2={web.y + 46}
-          stroke="#ffcf96"
-          strokeOpacity={0.3}
-        />
-        {[0, 1, 2].map((i) => (
-          <circle
-            key={i}
-            cx={web.x + 24 + i * 19}
-            cy={web.y + 23}
-            r={5}
-            fill="none"
-            stroke="#ffcf96"
-            strokeOpacity={0.7}
-            strokeWidth={1.3}
-          />
-        ))}
-        <rect
-          x={web.x + 96}
-          y={web.y + 13}
-          width={Math.min(web.w * 0.5, 340)}
-          height={20}
-          rx={10}
-          fill="#ffcf96"
-          fillOpacity={0.09}
-        />
-      </g>
-      {blocks.map((block, i) => {
-        const thread = threads[i % threads.length];
-        // The response travels back to the web, so this block lights up on arrival.
-        const flash = arrival(cycle(frame, thread.cycles, thread.phase + 0.5));
-        const appear = rise(frame, 26 + i * 3, 50 + i * 3);
-        const panel = block.kind === "panel";
-        const button = block.kind === "button";
-        return (
-          <rect
-            key={i}
-            x={block.x}
-            y={block.y}
-            width={block.w * (panel ? 1 : appear)}
-            height={block.h}
-            rx={block.rx}
-            opacity={appear}
-            fill={button ? AMBER : "#ffe7c9"}
-            fillOpacity={
-              button
-                ? 0.72 + flash * 0.28
-                : panel
-                  ? 0.025 + flash * 0.16
-                  : 0.2 + flash * 0.7
-            }
-            stroke={panel ? "#ffcf96" : "none"}
-            strokeOpacity={panel ? 0.28 + flash * 0.6 : 0}
-            strokeWidth={1.2}
-          />
-        );
-      })}
-      <PanelDetails blocks={blocks} frame={frame} threads={threads} />
-      <rect
-        x={headingBar.x + headingBar.w + 9}
-        y={headingBar.y}
-        width={3}
-        height={headingBar.h}
-        fill={AMBER}
-        opacity={rise(frame, 70, 90) * (wave(frame, 12, 0.1) > 0 ? 1 : 0.1)}
-      />
-    </g>
-  );
-};
-
-const AiField: React.FC<{
-  l: Layout;
-  frame: number;
-  nodes: Node[];
-  links: number[][];
-  threads: Thread[];
-}> = ({ l, frame, nodes, links, threads }) => {
-  const { cx, cy } = l.ai;
-  const placed = nodes.map((n) => {
-    const appear = rise(frame, 16 + n.r * 42, 46 + n.r * 42);
-    const dx = wave(frame, n.cycles, n.phase) * n.wobble;
-    const dy = wave(frame, n.cycles, n.phase + 0.25) * n.wobble;
-    // Rings of light spread outwards through the field, twice per loop.
-    const ring = (wave(frame, 2, -n.r * 1.4) + 1) / 2;
-    return {
-      x: cx + (n.x + dx - cx) * appear,
-      y: cy + (n.y + dy - cy) * appear,
-      appear,
-      glow: 0.28 + 0.72 * ring * ring * ring,
-    };
-  });
-  const flares = new Map(
-    threads.map((t) => [t.target, arrival(cycle(frame, t.cycles, t.phase))]),
-  );
-
-  return (
-    <g>
-      {links.map(([a, b]) => {
-        const p = placed[a];
-        const q = placed[b];
-        return (
-          <line
-            key={`${a}-${b}`}
-            x1={p.x}
-            y1={p.y}
-            x2={q.x}
-            y2={q.y}
-            stroke={ICE}
-            strokeWidth={0.8}
-            strokeOpacity={
-              Math.min(p.appear, q.appear) * 0.13 +
-              Math.min(p.appear, q.appear) * 0.42 * Math.min(p.glow, q.glow)
-            }
-          />
-        );
-      })}
-      {placed.map((p, i) => (
-        <circle
-          key={i}
-          cx={p.x}
-          cy={p.y}
-          r={nodes[i].size}
-          fill="#bfe8ff"
-          opacity={p.appear * (0.35 + 0.65 * p.glow)}
-        />
-      ))}
-      <g style={{ filter: "drop-shadow(0 0 8px #7fd4ff)" }}>
-        {[...flares].map(([target, flare]) => {
-          const p = placed[target];
+  if (story.result === "chart") {
+    const bars = [
+      { label: "Káva", value: 412 },
+      { label: "Čaj", value: 268 },
+      { label: "Kakao", value: 153 },
+    ];
+    return (
+      <div style={{ ...lift, display: "flex", flexDirection: "column", gap: 10 * k }}>
+        {bars.map((bar, i) => {
+          const grow = rise(t, T.result + i * 6, T.result + 26 + i * 6);
           return (
-            <circle
-              key={target}
-              cx={p.x}
-              cy={p.y}
-              r={2.5 + flare * 5}
-              fill="#eaf8ff"
-              opacity={rise(frame, 90, 118) * (0.35 + flare * 0.65)}
-            />
+            <div
+              key={bar.label}
+              style={{ display: "flex", alignItems: "center", gap: 12 * k }}
+            >
+              <div style={{ width: 72 * k, color: TEXT, fontSize: 21 * k }}>
+                {bar.label}
+              </div>
+              <div
+                style={{
+                  flex: 1,
+                  height: 24 * k,
+                  borderRadius: 6 * k,
+                  background: "rgba(255, 255, 255, 0.05)",
+                }}
+              >
+                <div
+                  style={{
+                    width: `${(bar.value / 412) * 100 * grow}%`,
+                    height: "100%",
+                    borderRadius: 6 * k,
+                    background: i === 0 ? AMBER : "rgba(255, 180, 84, 0.5)",
+                  }}
+                />
+              </div>
+              <div
+                style={{
+                  width: 76 * k,
+                  textAlign: "right",
+                  color: MUTED,
+                  fontSize: 20 * k,
+                }}
+              >
+                {Math.round(bar.value * grow)} ks
+              </div>
+            </div>
           );
         })}
-      </g>
-    </g>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      style={{
+        ...lift,
+        display: "flex",
+        alignItems: "center",
+        gap: 6 * k,
+        color: ICE,
+        fontSize: 20 * k,
+        fontWeight: 500,
+      }}
+    >
+      <Check size={22 * k} color={ICE} />
+      Nová funkcia je hotová
+    </div>
   );
 };
 
-const Threads: React.FC<{
-  l: Layout;
-  frame: number;
-  threads: Thread[];
-}> = ({ l, frame, threads }) => {
-  const horizontal = l.flow === "h";
-  const from = horizontal ? l.web.x + l.web.w : l.web.y + l.web.h;
-  const to = horizontal ? l.ai.cx - l.ai.rx * 0.5 : l.ai.cy - l.ai.ry * 0.5;
-  const pulsesOn = rise(frame, 92, 119);
-  const axis = horizontal
-    ? { x1: from, y1: 0, x2: to, y2: 0 }
-    : { x1: 0, y1: from, x2: 0, y2: to };
+// Scene 3 starts from a real page, and the result adds a button to it.
+const InvoiceRows: React.FC<{ t: number; k: number }> = ({ t, k }) => {
+  const added = rise(t, T.result, T.result + 14);
+  const glow = 1 - linear(t, T.result + 10, T.result + 50);
   return (
-    <g>
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 * k }}>
+      {[
+        ["Faktúra 2026-014", "480 €"],
+        ["Faktúra 2026-015", "1 260 €"],
+      ].map(([name, price]) => (
+        <div
+          key={name}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 12 * k,
+            height: 40 * k,
+            padding: `0 ${12 * k}px`,
+            borderRadius: 10 * k,
+            background: "rgba(255, 255, 255, 0.04)",
+            color: TEXT,
+            fontSize: 20 * k,
+          }}
+        >
+          <div style={{ flex: 1 }}>{name}</div>
+          <div style={{ color: MUTED }}>{price}</div>
+          <div
+            style={{
+              opacity: added,
+              scale: 0.8 + 0.2 * added,
+              padding: `${4 * k}px ${11 * k}px`,
+              borderRadius: 8 * k,
+              background: AMBER,
+              color: INK,
+              fontSize: 17 * k,
+              fontWeight: 600,
+              boxShadow: `0 0 ${22 * k * glow}px rgba(255, 180, 84, ${glow})`,
+            }}
+          >
+            Export PDF
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const WebPanel: React.FC<{
+  l: Layout;
+  story: Story;
+  t: number;
+  intro: number;
+}> = ({ l, story, t, intro }) => {
+  const { k, web } = l;
+  const content = presence(t);
+  const bubble = rise(t, T.send, T.send + 12);
+  const flash = rise(t, T.result, T.result + 8) * (1 - linear(t, T.result + 8, T.result + 45));
+  const typing = t >= T.typeStart && t < T.send;
+  const caret = Math.floor(t / 8) % 2 === 0;
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: web.x,
+        top: web.y,
+        width: web.w,
+        height: web.h,
+        opacity: intro,
+        translate: `0 ${(1 - intro) * 18}px`,
+        display: "flex",
+        flexDirection: "column",
+        borderRadius: 16 * k,
+        background: "#0b0f16",
+        border: `1.5px solid rgba(255, 207, 150, ${0.42 + flash * 0.58})`,
+        boxShadow: `0 0 ${50 * flash}px rgba(255, 180, 84, ${0.35 * flash})`,
+        overflow: "hidden",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 8 * k,
+          height: 50 * k,
+          flexShrink: 0,
+          padding: `0 ${18 * k}px`,
+          borderBottom: "1px solid rgba(255, 207, 150, 0.2)",
+        }}
+      >
+        {[0, 1, 2].map((i) => (
+          <div
+            key={i}
+            style={{
+              width: 11 * k,
+              height: 11 * k,
+              borderRadius: "50%",
+              border: "1.3px solid rgba(255, 207, 150, 0.6)",
+            }}
+          />
+        ))}
+        <div
+          style={{
+            flex: 1,
+            marginLeft: 10 * k,
+            padding: `${4 * k}px ${14 * k}px`,
+            borderRadius: 99,
+            background: "rgba(255, 207, 150, 0.08)",
+            color: MUTED,
+            fontSize: 17 * k,
+          }}
+        >
+          <span style={{ opacity: content }}>{story.path}</span>
+          &nbsp;
+        </div>
+      </div>
+
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          gap: 14 * k,
+          padding: `${18 * k}px ${20 * k}px 0`,
+          opacity: content,
+        }}
+      >
+        {story.result === "feature" ? <InvoiceRows t={t} k={k} /> : null}
+        <div
+          style={{
+            alignSelf: "flex-end",
+            maxWidth: "88%",
+            opacity: bubble,
+            translate: `0 ${(1 - bubble) * 10 * k}px`,
+            padding: `${10 * k}px ${16 * k}px`,
+            borderRadius: 14 * k,
+            background: "rgba(255, 180, 84, 0.14)",
+            border: "1px solid rgba(255, 180, 84, 0.4)",
+            color: TEXT,
+            fontSize: 22 * k,
+            lineHeight: 1.25,
+          }}
+        >
+          {story.task}
+        </div>
+        <WebResult story={story} t={t} k={k} />
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 10 * k,
+          margin: `${10 * k}px ${20 * k}px ${16 * k}px`,
+          padding: `0 ${8 * k}px 0 ${16 * k}px`,
+          height: 52 * k,
+          flexShrink: 0,
+          borderRadius: 12 * k,
+          border: `1px solid rgba(255, 207, 150, ${typing ? 0.65 : 0.28})`,
+          fontSize: 21 * k,
+        }}
+      >
+        <div style={{ flex: 1, color: typing ? TEXT : MUTED, whiteSpace: "nowrap" }}>
+          {typing ? typed(story.task, t, T.typeStart, T.typeEnd) : "Zadajte úlohu…"}
+          {typing ? (
+            <span style={{ color: AMBER, opacity: caret ? 1 : 0 }}>|</span>
+          ) : null}
+        </div>
+        <div
+          style={{
+            width: 36 * k,
+            height: 36 * k,
+            borderRadius: 9 * k,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: AMBER,
+            scale: t >= T.send && t < T.send + 6 ? 0.86 : 1,
+          }}
+        >
+          <svg width={20 * k} height={20 * k} viewBox="0 0 20 20" fill="none">
+            <path
+              d="M4 10H16M16 10L10.5 4.5M16 10L10.5 15.5"
+              stroke={INK}
+              strokeWidth={2.2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const StepRow: React.FC<{ label: string; index: number; t: number; k: number }> = ({
+  label,
+  index,
+  t,
+  k,
+}) => {
+  const start = T.stepsStart + index * T.stepFrames;
+  const finish = start + T.stepFrames;
+  const active = t >= start && t < finish;
+  const done = t >= finish;
+  const size = 26 * k;
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 12 * k,
+        color: TEXT,
+        fontSize: 22 * k,
+        opacity: active ? 1 : done ? 0.72 : 0.3,
+      }}
+    >
+      <div style={{ width: size, height: size, flexShrink: 0 }}>
+        {done ? (
+          <Check size={size} color={ICE} />
+        ) : (
+          <svg
+            width={size}
+            height={size}
+            viewBox="0 0 24 24"
+            fill="none"
+            style={{ rotate: active ? `${(t - start) * 14}deg` : undefined }}
+          >
+            <circle
+              cx={12}
+              cy={12}
+              r={9}
+              stroke={ICE}
+              strokeOpacity={active ? 0.25 : 0.6}
+              strokeWidth={2}
+            />
+            {active ? (
+              <path
+                d="M12 3a9 9 0 0 1 9 9"
+                stroke={ICE}
+                strokeWidth={2.4}
+                strokeLinecap="round"
+              />
+            ) : null}
+          </svg>
+        )}
+      </div>
+      {label}
+    </div>
+  );
+};
+
+const AiPanel: React.FC<{
+  l: Layout;
+  story: Story;
+  t: number;
+  intro: number;
+}> = ({ l, story, t, intro }) => {
+  const { k, ai } = l;
+  const content = presence(t);
+  const working = rise(t, T.taskArrives - 4, T.taskArrives + 8) * (1 - rise(t, T.done - 6, T.done + 12));
+  const doneLabel = rise(t, T.done, T.done + 8) * (1 - linear(t, T.fadeOut, T.end));
+  const received = rise(t, T.taskArrives, T.taskArrives + 10);
+  const spin = interpolate(t, [T.taskArrives, T.done], [0, 720], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.inOut(Easing.quad),
+  });
+  const diagonal = Math.hypot(ai.w, ai.h) * 1.1;
+  const ringAngle = t * 5;
+  const ring = {
+    position: "absolute" as const,
+    left: ai.w / 2 - diagonal / 2,
+    top: ai.h / 2 - diagonal / 2,
+    width: diagonal,
+    height: diagonal,
+    rotate: `${ringAngle}deg`,
+    background: `conic-gradient(${ICE}, #ffffff 12%, ${AMBER} 30%, transparent 48%, ${ICE} 70%, transparent 86%, ${ICE})`,
+  };
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: ai.x,
+        top: ai.y,
+        width: ai.w,
+        height: ai.h,
+        opacity: intro,
+        translate: `0 ${(1 - intro) * 18}px`,
+      }}
+    >
+      {/* The moving light around the panel is on only while the AI works. */}
+      <div
+        style={{
+          position: "absolute",
+          inset: -14,
+          borderRadius: 30 * k,
+          overflow: "hidden",
+          filter: "blur(20px)",
+          opacity: working * 0.6,
+        }}
+      >
+        <div style={{ ...ring, left: ring.left + 14, top: ring.top + 14 }} />
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          borderRadius: 16 * k,
+          overflow: "hidden",
+          background: "rgba(127, 212, 255, 0.34)",
+        }}
+      >
+        <div style={{ ...ring, opacity: working }} />
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          inset: 2,
+          borderRadius: 15 * k,
+          background: "#090f17",
+          display: "flex",
+          flexDirection: "column",
+          padding: `${16 * k}px ${22 * k}px ${18 * k}px`,
+          gap: 14 * k,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 11 * k }}>
+          <Spark size={30 * k} rotate={spin} scale={1 + working * 0.14} />
+          <div style={{ color: TEXT, fontSize: 25 * k, fontWeight: 600 }}>AI</div>
+          <div
+            style={{
+              flex: 1,
+              minWidth: 0,
+              marginLeft: 6 * k,
+              color: MUTED,
+              fontSize: 19 * k,
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              opacity: received * content,
+            }}
+          >
+            {story.task}
+          </div>
+          <div
+            style={{
+              position: "relative",
+              width: 100 * k,
+              height: 28 * k,
+              fontSize: 19 * k,
+              fontWeight: 500,
+              textAlign: "right",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                right: 0,
+                color: MUTED,
+                opacity: 1 - Math.max(working, doneLabel),
+              }}
+            >
+              Čaká
+            </div>
+            <div
+              style={{ position: "absolute", right: 0, color: ICE, opacity: working }}
+            >
+              Pracuje
+            </div>
+            <div
+              style={{ position: "absolute", right: 0, color: ICE, opacity: doneLabel }}
+            >
+              Hotovo
+            </div>
+          </div>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 9 * k,
+            opacity: content * received,
+          }}
+        >
+          {story.steps.map((step, i) => (
+            <StepRow key={step} label={step} index={i} t={t} k={k} />
+          ))}
+        </div>
+
+        <div
+          style={{
+            flex: 1,
+            minHeight: 0,
+            padding: `${12 * k}px ${14 * k}px`,
+            borderRadius: 10 * k,
+            background: "rgba(127, 212, 255, 0.06)",
+            border: "1px solid rgba(127, 212, 255, 0.16)",
+            color: "#bfe8ff",
+            fontFamily: mono,
+            fontSize: 19 * k,
+            lineHeight: 1.4,
+            whiteSpace: "pre-wrap",
+            overflow: "hidden",
+          }}
+        >
+          <span style={{ opacity: content }}>
+            {typed(story.output, t, T.stepsStart + 6, T.outputEnd)}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const THREADS = 6;
+
+const Threads: React.FC<{ l: Layout; t: number; drawIn: number }> = ({
+  l,
+  t,
+  drawIn,
+}) => {
+  const horizontal = l.flow === "h";
+  const start = horizontal ? l.web.x + l.web.w : l.web.y + l.web.h;
+  const end = horizontal ? l.ai.x : l.ai.y;
+  const mid = horizontal
+    ? l.web.y + l.web.h / 2
+    : l.web.x + l.web.w / 2;
+  const spread = horizontal ? l.web.h * 0.34 : l.web.w * 0.36;
+  const gap = end - start;
+  // Routes are written as (u: along the flow, v: across it).
+  const pt = (u: number, v: number) => (horizontal ? `${u} ${v}` : `${v} ${u}`);
+  const paths = Array.from({ length: THREADS }, (_, i) => {
+    const v0 = mid + spread * ((2 * i) / (THREADS - 1) - 1);
+    const v1 = mid + (v0 - mid) * 0.6;
+    const u1 = start + gap * 0.1;
+    const u2 = u1 + Math.min(Math.abs(v1 - v0), gap * 0.25);
+    const u3 = start + gap * 0.5;
+    const pull = (end - u3) * 0.55;
+    return `M ${pt(start, v0)} L ${pt(u1, v0)} L ${pt(u2, v1)} L ${pt(u3, v1)} C ${pt(u3 + pull, v1)} ${pt(end - pull, v0)} ${pt(end, v0)}`;
+  });
+  const axis = horizontal
+    ? { x1: start, y1: 0, x2: end, y2: 0 }
+    : { x1: 0, y1: start, x2: 0, y2: end };
+
+  // Pulses only run when something is actually being sent.
+  const out = (i: number) => linear(t, T.send + 2 + i * 2, T.taskArrives + i * 2);
+  const back = (i: number) =>
+    linear(t, T.solutionLeaves + i * 2, T.result + i * 2);
+
+  return (
+    <svg
+      width={l.width}
+      height={l.height}
+      viewBox={`0 0 ${l.width} ${l.height}`}
+      style={{ position: "absolute" }}
+    >
       <defs>
         <linearGradient id="thread" gradientUnits="userSpaceOnUse" {...axis}>
           <stop offset="0" stopColor={AMBER} />
-          <stop offset="0.5" stopColor="#f2efe6" />
+          <stop offset="0.55" stopColor="#f2efe6" />
           <stop offset="1" stopColor={ICE} />
         </linearGradient>
       </defs>
-      {threads.map((thread, i) => (
-        <g key={i}>
-          <path
-            d={thread.d}
-            pathLength={1}
-            fill="none"
-            stroke="url(#thread)"
-            strokeOpacity={0.52}
-            strokeWidth={1.4}
-            strokeDasharray="1 1"
-            strokeDashoffset={
-              1 - rise(frame, 50 + (i % 4) * 7, 92 + (i % 4) * 7)
-            }
-          />
-          <rect
-            x={thread.port.x - 3.5}
-            y={thread.port.y - 3.5}
-            width={7}
-            height={7}
-            rx={1.5}
-            fill={AMBER}
-            opacity={rise(frame, 44, 62)}
-          />
-        </g>
+      {paths.map((d, i) => (
+        <path
+          key={i}
+          d={d}
+          pathLength={1}
+          fill="none"
+          stroke="url(#thread)"
+          strokeOpacity={0.5}
+          strokeWidth={1.5}
+          strokeDasharray="1 1"
+          strokeDashoffset={1 - drawIn}
+        />
       ))}
-      <g opacity={pulsesOn}>
-        <g style={{ filter: `drop-shadow(0 0 6px ${AMBER})` }}>
-          {threads.map((thread, i) => (
-            <path
-              key={i}
-              d={thread.d}
-              pathLength={1000}
-              fill="none"
-              stroke="#ffd59c"
-              strokeWidth={2.4}
-              strokeLinecap="round"
-              strokeDasharray="26 974"
-              strokeDashoffset={
-                -cycle(frame, thread.cycles, thread.phase) * 1000
-              }
-            />
-          ))}
-        </g>
-        <g style={{ filter: `drop-shadow(0 0 6px ${ICE})` }}>
-          {threads.map((thread, i) => (
-            <path
-              key={i}
-              d={thread.d}
-              pathLength={1000}
-              fill="none"
-              stroke="#c9edff"
-              strokeWidth={2.4}
-              strokeLinecap="round"
-              strokeDasharray="26 974"
-              strokeDashoffset={
-                -(1 - cycle(frame, thread.cycles, thread.phase + 0.5)) * 1000
-              }
-            />
-          ))}
-        </g>
+      <g style={{ filter: `drop-shadow(0 0 7px ${AMBER})` }}>
+        {paths.map((d, i) => (
+          <path
+            key={i}
+            d={d}
+            pathLength={1000}
+            fill="none"
+            stroke="#ffd59c"
+            strokeWidth={2.6}
+            strokeLinecap="round"
+            strokeDasharray="70 930"
+            strokeDashoffset={-out(i) * 1000}
+            opacity={out(i) > 0 && out(i) < 1 ? 1 : 0}
+          />
+        ))}
       </g>
-    </g>
+      <g style={{ filter: `drop-shadow(0 0 7px ${ICE})` }}>
+        {paths.map((d, i) => (
+          <path
+            key={i}
+            d={d}
+            pathLength={1000}
+            fill="none"
+            stroke="#c9edff"
+            strokeWidth={2.6}
+            strokeLinecap="round"
+            strokeDasharray="70 930"
+            strokeDashoffset={-(1 - back(i)) * 1000}
+            opacity={back(i) > 0 && back(i) < 1 ? 1 : 0}
+          />
+        ))}
+      </g>
+    </svg>
+  );
+};
+
+// The labelled messages that travel along the connection.
+const Courier: React.FC<{ l: Layout; t: number }> = ({ l, t }) => {
+  const horizontal = l.flow === "h";
+  const { k } = l;
+  const start = horizontal ? l.web.x + l.web.w : l.web.y + l.web.h;
+  const end = horizontal ? l.ai.x : l.ai.y;
+  const mid = horizontal ? l.web.y + l.web.h / 2 : l.web.x + l.web.w / 2;
+
+  const pill = (
+    label: string,
+    color: string,
+    progress: number,
+    visible: number,
+    icon: boolean,
+  ) => {
+    const u = start + (end - start) * progress;
+    return (
+      <div
+        style={{
+          position: "absolute",
+          left: horizontal ? u : mid,
+          top: horizontal ? mid : u,
+          translate: "-50% -50%",
+          opacity: visible,
+          display: "flex",
+          alignItems: "center",
+          gap: 6 * k,
+          padding: `${7 * k}px ${15 * k}px`,
+          borderRadius: 99,
+          background: color,
+          color: INK,
+          fontSize: 20 * k,
+          fontWeight: 600,
+          whiteSpace: "nowrap",
+          boxShadow: `0 0 26px ${color}`,
+        }}
+      >
+        {icon ? <Check size={20 * k} color={INK} /> : null}
+        {label}
+      </div>
+    );
+  };
+
+  const outProgress = interpolate(t, [T.send + 2, T.taskArrives], [0.12, 0.88], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.inOut(Easing.quad),
+  });
+  const backProgress = interpolate(t, [T.solutionLeaves, T.result], [0.88, 0.12], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.inOut(Easing.quad),
+  });
+
+  return (
+    <>
+      {pill(
+        "Úloha",
+        AMBER,
+        outProgress,
+        linear(t, T.send + 2, T.send + 8) * (1 - linear(t, T.taskArrives - 6, T.taskArrives)),
+        false,
+      )}
+      {pill(
+        "Riešenie",
+        ICE,
+        backProgress,
+        linear(t, T.solutionLeaves, T.solutionLeaves + 6) * (1 - linear(t, T.result - 6, T.result)),
+        true,
+      )}
+    </>
   );
 };
 
 export const WebAiScene: React.FC<{ layout: Layout }> = ({ layout: l }) => {
   const frame = useCurrentFrame();
-  const { nodes, links, threads } = useMemo(() => {
-    const builtNodes = buildNodes(l);
-    return {
-      nodes: builtNodes,
-      links: buildLinks(builtNodes),
-      threads: buildThreads(l, builtNodes),
-    };
-  }, [l]);
+  const elapsed = frame - INTRO_FRAMES;
+  const t = elapsed < 0 ? -1 : elapsed % STORY_FRAMES;
+  const story =
+    stories[elapsed < 0 ? 0 : Math.floor(elapsed / STORY_FRAMES) % stories.length];
+  const intro = rise(frame, 0, 26);
+  const drawIn = rise(frame, 18, 56);
+  const working = rise(t, T.taskArrives - 4, T.taskArrives + 8) * (1 - rise(t, T.done - 6, T.done + 16));
+  const horizontal = l.flow === "h";
+  const aiX = ((l.ai.x + l.ai.w / 2) / l.width) * 100;
+  const aiY = ((l.ai.y + l.ai.h / 2) / l.height) * 100;
+  const webX = ((l.web.x + l.web.w / 2) / l.width) * 100;
+  const webY = ((l.web.y + l.web.h / 2) / l.height) * 100;
+  const radius = horizontal ? "48% 62%" : "75% 34%";
 
   return (
-    <AbsoluteFill style={{ backgroundColor: "#06090f" }}>
-      <svg
-        width={l.width}
-        height={l.height}
-        viewBox={`0 0 ${l.width} ${l.height}`}
-        style={{ position: "absolute" }}
-      >
-        <Backdrop l={l} frame={frame} />
-        <AiField
-          l={l}
-          frame={frame}
-          nodes={nodes}
-          links={links}
-          threads={threads}
-        />
-        <Threads l={l} frame={frame} threads={threads} />
-        <WebSide l={l} frame={frame} threads={threads} />
-      </svg>
+    <AbsoluteFill style={{ backgroundColor: INK, fontFamily: sans }}>
+      <AbsoluteFill
+        style={{
+          opacity: intro,
+          background: `radial-gradient(ellipse ${radius} at ${webX}% ${webY}%, rgba(255, 180, 84, 0.1), transparent 100%)`,
+        }}
+      />
+      <AbsoluteFill
+        style={{
+          opacity: intro * (0.55 + working * 0.45),
+          background: `radial-gradient(ellipse ${radius} at ${aiX}% ${aiY}%, rgba(127, 212, 255, 0.18), transparent 100%)`,
+        }}
+      />
+      {/* Fades every edge to the page colour, so the video has no visible border. */}
+      <AbsoluteFill style={{ boxShadow: `inset 0 0 110px 50px ${INK}` }} />
+      <Threads l={l} t={t} drawIn={drawIn} />
+      <WebPanel l={l} story={story} t={t} intro={intro} />
+      <AiPanel l={l} story={story} t={t} intro={intro} />
+      <Courier l={l} t={t} />
     </AbsoluteFill>
   );
 };
