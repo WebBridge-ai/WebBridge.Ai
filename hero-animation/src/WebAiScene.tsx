@@ -1,6 +1,18 @@
 import { loadFont as loadSans } from "@remotion/google-fonts/BricolageGrotesque";
 import { loadFont as loadMono } from "@remotion/google-fonts/JetBrainsMono";
 import {
+  Activity,
+  FileSearch,
+  KeyRound,
+  LucideIcon,
+  MessageSquareCode,
+  Send,
+  ShieldCheck,
+  Split,
+  Wrench,
+  Zap,
+} from "lucide-react";
+import {
   AbsoluteFill,
   Easing,
   interpolate,
@@ -69,15 +81,15 @@ export const TALL: Layout = {
 };
 
 // The layer every request passes through, in order.
-const LAYERS = [
-  "Access",
-  "Cache",
-  "Router",
-  "RAG",
-  "Prompt",
-  "Tools",
-  "Guardrails",
-  "Observability",
+const LAYERS: { label: string; icon: LucideIcon }[] = [
+  { label: "Access", icon: KeyRound },
+  { label: "Cache", icon: Zap },
+  { label: "Router", icon: Split },
+  { label: "RAG", icon: FileSearch },
+  { label: "Prompt", icon: MessageSquareCode },
+  { label: "Tools", icon: Wrench },
+  { label: "Guardrails", icon: ShieldCheck },
+  { label: "Observability", icon: Activity },
 ];
 
 type Story = {
@@ -95,7 +107,7 @@ const stories: Story[] = [
     values: [
       "rola: zákazník",
       "miss",
-      "rýchly model",
+      "Jev → doručenie 97 %",
       "zásady doručenia",
       "podpora v12",
       "orders.find(4821)",
@@ -110,7 +122,7 @@ const stories: Story[] = [
     values: [
       "rola: manažér",
       "miss",
-      "analytický model",
+      "Jev → predaje 94 %",
       "schéma databázy",
       "report v7",
       "sql.query()",
@@ -125,7 +137,7 @@ const stories: Story[] = [
     values: [
       "rola: vývojár",
       "miss",
-      "model na kód",
+      "Jev → kód 91 %",
       "kód aplikácie",
       "dev v4",
       "edit(), testy()",
@@ -504,27 +516,28 @@ const WebPanel: React.FC<{
 
 const LayerChip: React.FC<{
   label: string;
+  icon: LucideIcon;
   value: string;
   index: number;
   t: number;
   k: number;
-}> = ({ label, value, index, t, k }) => {
+}> = ({ label, icon: Icon, value, index, t, k }) => {
   const start = T.stepsStart + index * T.stepFrames;
   const finish = start + T.stepFrames;
   const active = t >= start && t < finish;
   const done = t >= finish;
   const lit = rise(t, start, start + 5) * (1 - rise(t, finish, finish + 10));
   const fade = 1 - linear(t, T.fadeOut, T.end);
+  const on = active ? 1 : done ? fade : 0;
   const size = 18 * k;
   return (
     <div
       style={{
         display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        gap: 1 * k,
+        alignItems: "center",
+        gap: 9 * k,
         minWidth: 0,
-        padding: `0 ${11 * k}px`,
+        padding: `0 ${9 * k}px`,
         borderRadius: 9 * k,
         background: `rgba(127, 212, 255, ${0.045 + lit * 0.16})`,
         border: `1px solid rgba(127, 212, 255, ${0.14 + lit * 0.7})`,
@@ -535,49 +548,66 @@ const LayerChip: React.FC<{
         style={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
-          color: TEXT,
-          fontSize: 19 * k,
-          fontWeight: 600,
-          lineHeight: 1.15,
-          opacity: active ? 1 : 0.55 + (done ? 0.45 * fade : 0),
+          justifyContent: "center",
+          flexShrink: 0,
+          width: 32 * k,
+          height: 32 * k,
+          borderRadius: 8 * k,
+          background: `rgba(127, 212, 255, ${0.07 + on * 0.1})`,
+          opacity: 0.55 + on * 0.45,
         }}
       >
-        {label}
-        {done ? (
-          <div style={{ display: "flex", opacity: fade }}>
-            <Check size={size} color={ICE} />
-          </div>
-        ) : active ? (
-          <svg
-            width={size}
-            height={size}
-            viewBox="0 0 24 24"
-            fill="none"
-            style={{ rotate: `${(t - start) * 26}deg` }}
-          >
-            <path
-              d="M12 3a9 9 0 0 1 9 9"
-              stroke={ICE}
-              strokeWidth={3}
-              strokeLinecap="round"
-            />
-          </svg>
-        ) : null}
+        <Icon size={19 * k} color={ICE} strokeWidth={2} />
       </div>
-      <div
-        style={{
-          color: "#bfe8ff",
-          fontFamily: mono,
-          fontSize: 15.5 * k,
-          lineHeight: 1.25,
-          minHeight: 15.5 * k * 1.25,
-          whiteSpace: "nowrap",
-        }}
-      >
-        <span style={{ opacity: fade }}>
-          {typed(value, t, start + 1, finish - 2)}
-        </span>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            color: TEXT,
+            fontSize: 18.5 * k,
+            fontWeight: 600,
+            lineHeight: 1.15,
+            opacity: 0.55 + on * 0.45,
+          }}
+        >
+          {label}
+          {done ? (
+            <div style={{ display: "flex", opacity: fade }}>
+              <Check size={size} color={ICE} />
+            </div>
+          ) : active ? (
+            <svg
+              width={size}
+              height={size}
+              viewBox="0 0 24 24"
+              fill="none"
+              style={{ rotate: `${(t - start) * 26}deg` }}
+            >
+              <path
+                d="M12 3a9 9 0 0 1 9 9"
+                stroke={ICE}
+                strokeWidth={3}
+                strokeLinecap="round"
+              />
+            </svg>
+          ) : null}
+        </div>
+        <div
+          style={{
+            color: "#bfe8ff",
+            fontFamily: mono,
+            fontSize: 14.4 * k,
+            lineHeight: 1.25,
+            minHeight: 14.4 * k * 1.25,
+            whiteSpace: "nowrap",
+          }}
+        >
+          <span style={{ opacity: fade }}>
+            {typed(value, t, start + 1, finish - 2)}
+          </span>
+        </div>
       </div>
     </div>
   );
@@ -667,7 +697,7 @@ const AiPanel: React.FC<{
         >
           <Spark size={26 * k} rotate={spin} scale={1 + working * 0.14} />
           <div style={{ flex: 1, color: TEXT, fontSize: 23 * k, fontWeight: 600 }}>
-            AI vrstva
+            WebBridge.AI
           </div>
           <div
             style={{
@@ -711,10 +741,11 @@ const AiPanel: React.FC<{
             gap: 6 * k,
           }}
         >
-          {LAYERS.map((label, i) => (
+          {LAYERS.map(({ label, icon }, i) => (
             <LayerChip
               key={label}
               label={label}
+              icon={icon}
               value={story.values[i]}
               index={i}
               t={t}
@@ -838,7 +869,7 @@ const Courier: React.FC<{ l: Layout; t: number }> = ({ l, t }) => {
     color: string,
     progress: number,
     visible: number,
-    icon: boolean,
+    icon: React.ReactNode,
   ) => {
     const u = start + (end - start) * progress;
     return (
@@ -862,7 +893,7 @@ const Courier: React.FC<{ l: Layout; t: number }> = ({ l, t }) => {
           boxShadow: `0 0 26px ${color}`,
         }}
       >
-        {icon ? <Check size={20 * k} color={INK} /> : null}
+        {icon}
         {label}
       </div>
     );
@@ -886,14 +917,14 @@ const Courier: React.FC<{ l: Layout; t: number }> = ({ l, t }) => {
         AMBER,
         outProgress,
         linear(t, T.send + 2, T.send + 8) * (1 - linear(t, T.taskArrives - 6, T.taskArrives)),
-        false,
+        <Send key="send" size={17 * k} color={INK} strokeWidth={2.4} />,
       )}
       {pill(
         "Riešenie",
         ICE,
         backProgress,
         linear(t, T.solutionLeaves, T.solutionLeaves + 6) * (1 - linear(t, T.result - 6, T.result)),
-        true,
+        <Check key="check" size={20 * k} color={INK} />,
       )}
     </>
   );
