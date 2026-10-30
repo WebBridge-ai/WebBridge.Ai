@@ -100,55 +100,142 @@ type Story = {
   result: "reply" | "chart" | "feature";
 };
 
-const stories: Story[] = [
-  {
-    path: "vasafirma.sk/podpora",
-    task: "Kedy mi príde objednávka 4821?",
-    values: [
-      "rola: zákazník",
-      "miss",
-      "Jev → doručenie 97 %",
-      "zásady doručenia",
-      "podpora v12",
-      "orders.find(4821)",
-      "osobné údaje skryté",
-      "1,2 s · 840 tokenov",
-    ],
-    result: "reply",
-  },
-  {
-    path: "vasafirma.sk/prehlad",
-    task: "Čo sa tento mesiac predáva najlepšie?",
-    values: [
-      "rola: manažér",
-      "miss",
-      "Jev → predaje 94 %",
-      "schéma databázy",
-      "report v7",
-      "sql.query()",
-      "len na čítanie",
-      "2,4 s · 1 900 tokenov",
-    ],
-    result: "chart",
-  },
-  {
-    path: "vasafirma.sk/faktury",
-    task: "Pridaj k faktúram export do PDF.",
-    values: [
-      "rola: vývojár",
-      "miss",
-      "Jev → kód 91 %",
-      "kód aplikácie",
-      "dev v4",
-      "edit(), testy()",
-      "schválenie človekom",
-      "38 s · 12 400 tokenov",
-    ],
-    result: "feature",
-  },
-];
+export type Lang = "en" | "sk";
 
-export const LOOP_FRAMES = STORY_FRAMES * stories.length;
+const COPY = {
+  en: {
+    placeholder: "Enter a task…",
+    waiting: "Waiting",
+    working: "Working",
+    done: "Done",
+    task: "Task",
+    solution: "Solution",
+    reply: "It's on the way. Arriving Wednesday.",
+    resolved: "Resolved",
+    featureReady: "New feature is ready",
+    bars: ["Coffee", "Tea", "Cocoa"],
+    unit: "pcs",
+    invoices: [
+      ["Invoice 2026-014", "€480"],
+      ["Invoice 2026-015", "€1,260"],
+    ],
+    stories: [
+      {
+        path: "yourcompany.com/support",
+        task: "When will order 4821 arrive?",
+        values: [
+          "role: customer",
+          "miss",
+          "fast model",
+          "delivery policy",
+          "support v12",
+          "orders.find(4821)",
+          "personal data hidden",
+          "1.2 s · 840 tokens",
+        ],
+        result: "reply",
+      },
+      {
+        path: "yourcompany.com/overview",
+        task: "What's selling best this month?",
+        values: [
+          "role: manager",
+          "miss",
+          "analytics model",
+          "database schema",
+          "report v7",
+          "sql.query()",
+          "read-only",
+          "2.4 s · 1,900 tokens",
+        ],
+        result: "chart",
+      },
+      {
+        path: "yourcompany.com/invoices",
+        task: "Add PDF export to invoices.",
+        values: [
+          "role: developer",
+          "miss",
+          "coding model",
+          "app code",
+          "dev v4",
+          "edit(), tests()",
+          "human approval",
+          "38 s · 12,400 tokens",
+        ],
+        result: "feature",
+      },
+    ] as Story[],
+  },
+  sk: {
+    placeholder: "Zadajte úlohu…",
+    waiting: "Čaká",
+    working: "Pracuje",
+    done: "Hotovo",
+    task: "Úloha",
+    solution: "Riešenie",
+    reply: "Balík je na ceste. Doručíme ho v\u00A0stredu.",
+    resolved: "Vyriešené",
+    featureReady: "Nová funkcia je hotová",
+    bars: ["Káva", "Čaj", "Kakao"],
+    unit: "ks",
+    invoices: [
+      ["Faktúra 2026-014", "480 €"],
+      ["Faktúra 2026-015", "1 260 €"],
+    ],
+    stories: [
+      {
+        path: "vasafirma.sk/podpora",
+        task: "Kedy mi príde objednávka 4821?",
+        values: [
+          "rola: zákazník",
+          "miss",
+          "rýchly model",
+          "zásady doručenia",
+          "podpora v12",
+          "orders.find(4821)",
+          "osobné údaje skryté",
+          "1,2 s · 840 tokenov",
+        ],
+        result: "reply",
+      },
+      {
+        path: "vasafirma.sk/prehlad",
+        task: "Čo sa tento mesiac predáva najlepšie?",
+        values: [
+          "rola: manažér",
+          "miss",
+          "analytický model",
+          "schéma databázy",
+          "report v7",
+          "sql.query()",
+          "len na čítanie",
+          "2,4 s · 1 900 tokenov",
+        ],
+        result: "chart",
+      },
+      {
+        path: "vasafirma.sk/faktury",
+        task: "Pridaj k faktúram export do PDF.",
+        values: [
+          "rola: vývojár",
+          "miss",
+          "model na kód",
+          "kód aplikácie",
+          "dev v4",
+          "edit(), testy()",
+          "schválenie človekom",
+          "38 s · 12 400 tokenov",
+        ],
+        result: "feature",
+      },
+    ] as Story[],
+  },
+};
+
+type Copy = (typeof COPY)[Lang];
+
+export const LOOP_FRAMES = STORY_FRAMES * COPY.en.stories.length;
 
 const AMBER = "#ffb454";
 const ICE = "#7fd4ff";
@@ -206,11 +293,12 @@ const Spark: React.FC<{ size: number; rotate: number; scale: number }> = ({
   </svg>
 );
 
-const WebResult: React.FC<{ story: Story; t: number; k: number }> = ({
-  story,
-  t,
-  k,
-}) => {
+const WebResult: React.FC<{
+  story: Story;
+  copy: Copy;
+  t: number;
+  k: number;
+}> = ({ story, copy, t, k }) => {
   const shown = rise(t, T.result, T.result + 16);
   const lift = { opacity: shown, translate: `0 ${(1 - shown) * 12 * k}px` };
 
@@ -229,7 +317,7 @@ const WebResult: React.FC<{ story: Story; t: number; k: number }> = ({
             lineHeight: 1.3,
           }}
         >
-          Balík je na ceste. Doručíme ho v&nbsp;stredu.
+          {copy.reply}
         </div>
         <div
           style={{
@@ -242,7 +330,7 @@ const WebResult: React.FC<{ story: Story; t: number; k: number }> = ({
           }}
         >
           <Check size={22 * k} color={ICE} />
-          Vyriešené
+          {copy.resolved}
         </div>
       </div>
     );
@@ -250,9 +338,9 @@ const WebResult: React.FC<{ story: Story; t: number; k: number }> = ({
 
   if (story.result === "chart") {
     const bars = [
-      { label: "Káva", value: 412 },
-      { label: "Čaj", value: 268 },
-      { label: "Kakao", value: 153 },
+      { label: copy.bars[0], value: 412 },
+      { label: copy.bars[1], value: 268 },
+      { label: copy.bars[2], value: 153 },
     ];
     return (
       <div style={{ ...lift, display: "flex", flexDirection: "column", gap: 10 * k }}>
@@ -291,7 +379,7 @@ const WebResult: React.FC<{ story: Story; t: number; k: number }> = ({
                   fontSize: 20 * k,
                 }}
               >
-                {Math.round(bar.value * grow)} ks
+                {Math.round(bar.value * grow)} {copy.unit}
               </div>
             </div>
           );
@@ -313,21 +401,22 @@ const WebResult: React.FC<{ story: Story; t: number; k: number }> = ({
       }}
     >
       <Check size={22 * k} color={ICE} />
-      Nová funkcia je hotová
+      {copy.featureReady}
     </div>
   );
 };
 
 // Scene 3 starts from a real page, and the result adds a button to it.
-const InvoiceRows: React.FC<{ t: number; k: number }> = ({ t, k }) => {
+const InvoiceRows: React.FC<{ copy: Copy; t: number; k: number }> = ({
+  copy,
+  t,
+  k,
+}) => {
   const added = rise(t, T.result, T.result + 14);
   const glow = 1 - linear(t, T.result + 10, T.result + 50);
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 8 * k }}>
-      {[
-        ["Faktúra 2026-014", "480 €"],
-        ["Faktúra 2026-015", "1 260 €"],
-      ].map(([name, price]) => (
+      {copy.invoices.map(([name, price]) => (
         <div
           key={name}
           style={{
@@ -368,9 +457,10 @@ const InvoiceRows: React.FC<{ t: number; k: number }> = ({ t, k }) => {
 const WebPanel: React.FC<{
   l: Layout;
   story: Story;
+  copy: Copy;
   t: number;
   intro: number;
-}> = ({ l, story, t, intro }) => {
+}> = ({ l, story, copy, t, intro }) => {
   const { k, web } = l;
   const content = presence(t);
   const bubble = rise(t, T.send, T.send + 12);
@@ -446,7 +536,7 @@ const WebPanel: React.FC<{
           opacity: content,
         }}
       >
-        {story.result === "feature" ? <InvoiceRows t={t} k={k} /> : null}
+        {story.result === "feature" ? <InvoiceRows copy={copy} t={t} k={k} /> : null}
         <div
           style={{
             alignSelf: "flex-end",
@@ -464,7 +554,7 @@ const WebPanel: React.FC<{
         >
           {story.task}
         </div>
-        <WebResult story={story} t={t} k={k} />
+        <WebResult story={story} copy={copy} t={t} k={k} />
       </div>
 
       <div
@@ -482,7 +572,7 @@ const WebPanel: React.FC<{
         }}
       >
         <div style={{ flex: 1, color: typing ? TEXT : MUTED, whiteSpace: "nowrap" }}>
-          {typing ? typed(story.task, t, T.typeStart, T.typeEnd) : "Zadajte úlohu…"}
+          {typing ? typed(story.task, t, T.typeStart, T.typeEnd) : copy.placeholder}
           {typing ? (
             <span style={{ color: AMBER, opacity: caret ? 1 : 0 }}>|</span>
           ) : null}
@@ -616,9 +706,10 @@ const LayerChip: React.FC<{
 const AiPanel: React.FC<{
   l: Layout;
   story: Story;
+  copy: Copy;
   t: number;
   intro: number;
-}> = ({ l, story, t, intro }) => {
+}> = ({ l, story, copy, t, intro }) => {
   const { k, ai } = l;
   const working = rise(t, T.taskArrives - 4, T.taskArrives + 8) * (1 - rise(t, T.done - 6, T.done + 12));
   const doneLabel = rise(t, T.done, T.done + 8) * (1 - linear(t, T.fadeOut, T.end));
@@ -716,17 +807,17 @@ const AiPanel: React.FC<{
                 opacity: 1 - Math.max(working, doneLabel),
               }}
             >
-              Čaká
+              {copy.waiting}
             </div>
             <div
               style={{ position: "absolute", right: 0, color: ICE, opacity: working }}
             >
-              Pracuje
+              {copy.working}
             </div>
             <div
               style={{ position: "absolute", right: 0, color: ICE, opacity: doneLabel }}
             >
-              Hotovo
+              {copy.done}
             </div>
           </div>
         </div>
@@ -857,7 +948,11 @@ const Threads: React.FC<{ l: Layout; t: number; drawIn: number }> = ({
 };
 
 // The labelled messages that travel along the connection.
-const Courier: React.FC<{ l: Layout; t: number }> = ({ l, t }) => {
+const Courier: React.FC<{ l: Layout; copy: Copy; t: number }> = ({
+  l,
+  copy,
+  t,
+}) => {
   const horizontal = l.flow === "h";
   const { k } = l;
   const start = horizontal ? l.web.x + l.web.w : l.web.y + l.web.h;
@@ -913,14 +1008,14 @@ const Courier: React.FC<{ l: Layout; t: number }> = ({ l, t }) => {
   return (
     <>
       {pill(
-        "Úloha",
+        copy.task,
         AMBER,
         outProgress,
         linear(t, T.send + 2, T.send + 8) * (1 - linear(t, T.taskArrives - 6, T.taskArrives)),
         <Send key="send" size={17 * k} color={INK} strokeWidth={2.4} />,
       )}
       {pill(
-        "Riešenie",
+        copy.solution,
         ICE,
         backProgress,
         linear(t, T.solutionLeaves, T.solutionLeaves + 6) * (1 - linear(t, T.result - 6, T.result)),
@@ -930,10 +1025,15 @@ const Courier: React.FC<{ l: Layout; t: number }> = ({ l, t }) => {
   );
 };
 
-export const WebAiScene: React.FC<{ layout: Layout }> = ({ layout: l }) => {
+export const WebAiScene: React.FC<{ layout: Layout; lang: Lang }> = ({
+  layout: l,
+  lang,
+}) => {
+  const copy = COPY[lang];
   const frame = useCurrentFrame();
   const elapsed = frame - INTRO_FRAMES;
   const t = elapsed < 0 ? -1 : elapsed % STORY_FRAMES;
+  const stories = copy.stories;
   const story =
     stories[elapsed < 0 ? 0 : Math.floor(elapsed / STORY_FRAMES) % stories.length];
   const intro = rise(frame, 0, 26);
@@ -963,9 +1063,9 @@ export const WebAiScene: React.FC<{ layout: Layout }> = ({ layout: l }) => {
       {/* Fades every edge to the page colour, so the video has no visible border. */}
       <AbsoluteFill style={{ boxShadow: `inset 0 0 110px 50px ${INK}` }} />
       <Threads l={l} t={t} drawIn={drawIn} />
-      <WebPanel l={l} story={story} t={t} intro={intro} />
-      <AiPanel l={l} story={story} t={t} intro={intro} />
-      <Courier l={l} t={t} />
+      <WebPanel l={l} story={story} copy={copy} t={t} intro={intro} />
+      <AiPanel l={l} story={story} copy={copy} t={t} intro={intro} />
+      <Courier l={l} copy={copy} t={t} />
     </AbsoluteFill>
   );
 };

@@ -12,7 +12,7 @@ if (root.classList.contains('motion')) {
 
     function createVideo(part) {
         const video = document.createElement('video');
-        video.src = `assets/hero/${size}-${part}.mp4`;
+        video.src = `assets/hero/${root.lang}/${size}-${part}.mp4`;
         video.muted = true;
         video.playsInline = true;
         video.preload = 'auto';

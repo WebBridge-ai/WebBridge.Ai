@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="sk">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Programujeme weby a aplikácie a prepájame ich s AI: prompty, RAG, tools, prístupy, guardrails, cache, routing a observability.">
+    <meta name="description" content="We build websites and apps and connect them to AI: prompts, RAG, tools, access, guardrails, cache, routing and observability.">
     <meta name="theme-color" content="#06090f">
-    <title>WebBridge.AI – Váš most do sveta AI</title>
+    <title>WebBridge.AI – Your bridge to the world of AI</title>
+    <link rel="alternate" hreflang="en" href="index.html">
+    <link rel="alternate" hreflang="sk" href="sk.html">
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
     <link rel="preload" href="assets/fonts/bricolage-grotesque-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="css/style.css">
@@ -18,26 +20,169 @@
     </script>
 </head>
 <body>
+    <svg class="icon-sprite" aria-hidden="true">
+        <symbol id="i-access" viewBox="0 0 24 24"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"></path><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle></symbol>
+        <symbol id="i-cache" viewBox="0 0 24 24"><path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z"></path></symbol>
+        <symbol id="i-router" viewBox="0 0 24 24"><path d="M16 3h5v5"></path><path d="M8 3H3v5"></path><path d="M12 22v-8.3a4 4 0 0 0-1.172-2.872L3 3"></path><path d="m15 9 6-6"></path></symbol>
+        <symbol id="i-rag" viewBox="0 0 24 24"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"></path><path d="M14 2v5a1 1 0 0 0 1 1h5"></path><circle cx="11.5" cy="14.5" r="2.5"></circle><path d="M13.3 16.3 15 18"></path></symbol>
+        <symbol id="i-prompt" viewBox="0 0 24 24"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"></path><path d="m10 8-3 3 3 3"></path><path d="m14 14 3-3-3-3"></path></symbol>
+        <symbol id="i-tools" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z"></path></symbol>
+        <symbol id="i-guardrails" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></symbol>
+        <symbol id="i-observability" viewBox="0 0 24 24"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"></path></symbol>
+    </svg>
+
     <div class="hero">
         <div class="hero-media" id="heroMedia"></div>
 
         <header class="site-header">
-            <a href="./" class="logo">
-                WebBridge<span class="logo-highlight">.AI</span>
-            </a>
+            <a href="./" class="logo">WebBridge<span class="logo-highlight">.AI</span></a>
+            <nav class="lang-switch" aria-label="Language">
+                <a href="index.html" hreflang="en" lang="en" aria-current="page"><img src="assets/flags/gb.svg" alt="English" width="28" height="21"></a>
+                <a href="sk.html" hreflang="sk" lang="sk"><img src="assets/flags/sk.svg" alt="Slovenčina" width="28" height="21"></a>
+            </nav>
         </header>
 
-        <main class="hero-content">
-            <h1>Váš most do&nbsp;sveta AI.</h1>
-            <p>Programujeme weby a&nbsp;aplikácie a&nbsp;prepájame ich s&nbsp;AI, od&nbsp;RAG a&nbsp;tools po&nbsp;guardrails a&nbsp;observability.</p>
-            <a href="mailto:info@webbridge.ai" class="btn">Ozvite sa</a>
-        </main>
-
-        <footer class="site-footer">
-            <span>&copy; 2026 WebBridge.AI s.r.o.</span>
-            <a href="mailto:info@webbridge.ai">info@webbridge.ai</a>
-        </footer>
+        <div class="hero-content">
+            <h1>Your bridge to the world of&nbsp;AI.</h1>
+            <p>We build websites and apps and connect them to AI, from RAG and tools to guardrails and observability.</p>
+            <div class="hero-actions">
+                <a href="mailto:info@webbridge.ai" class="btn">Get in touch</a>
+                <a href="#how" class="btn btn-ghost">How it works</a>
+            </div>
+        </div>
     </div>
+
+    <main>
+        <section class="how" id="how">
+            <p class="eyebrow">How it works</p>
+            <h2>What happens between your website and AI</h2>
+            <p class="how-intro">A customer asks: “When will order 4821 arrive?” Before the answer comes back, the question passes through eight layers. Here is what each one does.</p>
+
+            <div class="pipeline">
+                <span class="pipeline-pill pipeline-task">Task</span>
+                <ol class="layers">
+                    <li class="layer" style="--mix: 0%">
+                        <div class="layer-icon"><svg class="icon" aria-hidden="true"><use href="#i-access"/></svg></div>
+                        <div class="layer-main">
+                            <h3><span class="layer-num">01</span>Access</h3>
+                            <p class="layer-what">Decides who can use the AI and what each person is allowed to see.</p>
+                            <p class="layer-without"><strong>Without it:</strong> One customer’s question could reach another customer’s data.</p>
+                        </div>
+                        <div class="layer-example">
+                            <span class="layer-example-label">In our example</span>
+                            <code>role: customer</code>
+                            <span class="layer-example-note">sees only their own orders</span>
+                        </div>
+                    </li>
+                    <li class="layer" style="--mix: 14%">
+                        <div class="layer-icon"><svg class="icon" aria-hidden="true"><use href="#i-cache"/></svg></div>
+                        <div class="layer-main">
+                            <h3><span class="layer-num">02</span>Cache</h3>
+                            <p class="layer-what">Reuses answers to questions it has already handled, saving time and money.</p>
+                            <p class="layer-without"><strong>Without it:</strong> You pay the model again for every identical question.</p>
+                        </div>
+                        <div class="layer-example">
+                            <span class="layer-example-label">In our example</span>
+                            <code>miss</code>
+                            <span class="layer-example-note">not asked before, so it moves on</span>
+                        </div>
+                    </li>
+                    <li class="layer" style="--mix: 29%">
+                        <div class="layer-icon"><svg class="icon" aria-hidden="true"><use href="#i-router"/></svg></div>
+                        <div class="layer-main">
+                            <h3><span class="layer-num">03</span>Router</h3>
+                            <p class="layer-what">Picks the right model for each task: a fast, cheap one for simple questions and a stronger one for hard problems.</p>
+                            <p class="layer-without"><strong>Without it:</strong> Everything runs on one model that is either too expensive or not good enough.</p>
+                        </div>
+                        <div class="layer-example">
+                            <span class="layer-example-label">In our example</span>
+                            <code>fast model</code>
+                            <span class="layer-example-note">a simple question needs no more</span>
+                        </div>
+                    </li>
+                    <li class="layer" style="--mix: 43%">
+                        <div class="layer-icon"><svg class="icon" aria-hidden="true"><use href="#i-rag"/></svg></div>
+                        <div class="layer-main">
+                            <h3><span class="layer-num">04</span>RAG
+                            <span class="layer-full">Retrieval-Augmented Generation</span></h3>
+                            <p class="layer-what">Finds the relevant passages in your documents and data and hands them to the model, so it answers from your facts.</p>
+                            <p class="layer-without"><strong>Without it:</strong> The model answers from general knowledge and may make things up.</p>
+                        </div>
+                        <div class="layer-example">
+                            <span class="layer-example-label">In our example</span>
+                            <code>delivery policy</code>
+                            <span class="layer-example-note">the document behind the answer</span>
+                        </div>
+                    </li>
+                    <li class="layer" style="--mix: 57%">
+                        <div class="layer-icon"><svg class="icon" aria-hidden="true"><use href="#i-prompt"/></svg></div>
+                        <div class="layer-main">
+                            <h3><span class="layer-num">05</span>Prompt</h3>
+                            <p class="layer-what">The instructions for the model: its role, tone, rules and answer format. We version them like code.</p>
+                            <p class="layer-without"><strong>Without it:</strong> Answers drift over time and nobody knows why.</p>
+                        </div>
+                        <div class="layer-example">
+                            <span class="layer-example-label">In our example</span>
+                            <code>support v12</code>
+                            <span class="layer-example-note">the current support instructions</span>
+                        </div>
+                    </li>
+                    <li class="layer" style="--mix: 71%">
+                        <div class="layer-icon"><svg class="icon" aria-hidden="true"><use href="#i-tools"/></svg></div>
+                        <div class="layer-main">
+                            <h3><span class="layer-num">06</span>Tools</h3>
+                            <p class="layer-what">Let the AI act instead of only talking: look up an order, query a database, send an email.</p>
+                            <p class="layer-without"><strong>Without it:</strong> The AI can tell you what to do, but it can’t do it.</p>
+                        </div>
+                        <div class="layer-example">
+                            <span class="layer-example-label">In our example</span>
+                            <code>orders.find(4821)</code>
+                            <span class="layer-example-note">looks the order up in your system</span>
+                        </div>
+                    </li>
+                    <li class="layer" style="--mix: 86%">
+                        <div class="layer-icon"><svg class="icon" aria-hidden="true"><use href="#i-guardrails"/></svg></div>
+                        <div class="layer-main">
+                            <h3><span class="layer-num">07</span>Guardrails</h3>
+                            <p class="layer-what">Check what goes in and what comes out: hide personal data, block forbidden actions, ask a person to approve.</p>
+                            <p class="layer-without"><strong>Without it:</strong> One bad answer goes straight to your customer.</p>
+                        </div>
+                        <div class="layer-example">
+                            <span class="layer-example-label">In our example</span>
+                            <code>personal data hidden</code>
+                            <span class="layer-example-note">the address stays out of the answer</span>
+                        </div>
+                    </li>
+                    <li class="layer" style="--mix: 100%">
+                        <div class="layer-icon"><svg class="icon" aria-hidden="true"><use href="#i-observability"/></svg></div>
+                        <div class="layer-main">
+                            <h3><span class="layer-num">08</span>Observability</h3>
+                            <p class="layer-what">Records every step, how long it took and what it cost, so problems can be found and quality measured.</p>
+                            <p class="layer-without"><strong>Without it:</strong> When the AI gets something wrong, nobody can tell why.</p>
+                        </div>
+                        <div class="layer-example">
+                            <span class="layer-example-label">In our example</span>
+                            <code>1.2 s · 840 tokens</code>
+                            <span class="layer-example-note">time and cost of this answer</span>
+                        </div>
+                    </li>
+                </ol>
+                <span class="pipeline-pill pipeline-solution">Solution</span>
+            </div>
+
+            <p class="how-note">The values in the example are illustrative.</p>
+
+            <div class="how-close">
+                <h2>Want this in your application?</h2>
+                <a href="mailto:info@webbridge.ai" class="btn">Get in touch</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <span>&copy; 2026 WebBridge.AI s.r.o.</span>
+        <a href="mailto:info@webbridge.ai">info@webbridge.ai</a>
+    </footer>
 
     <script src="js/main.js"></script>
 </body>
