@@ -1,13 +1,13 @@
 import { Composition } from "remotion";
 import {
-  BridgeScene,
   FPS,
   INTRO_FRAMES,
   Layout,
   LOOP_FRAMES,
   TALL,
+  WebAiScene,
   WIDE,
-} from "./BridgeScene";
+} from "./WebAiScene";
 
 const compositions: { id: string; layout: Layout }[] = [
   { id: "HeroWide", layout: WIDE },
@@ -21,7 +21,7 @@ export const MyComposition = () => {
         <Composition
           key={id}
           id={id}
-          component={BridgeScene}
+          component={WebAiScene}
           durationInFrames={INTRO_FRAMES + LOOP_FRAMES}
           fps={FPS}
           width={layout.width}

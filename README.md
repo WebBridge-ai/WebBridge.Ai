@@ -26,6 +26,6 @@ npm run dev          # náhľad v Remotion Studiu
 npm run render:site  # nové videá a obrázky do ../assets/hero
 ```
 
-Scéna je v `hero-animation/src/BridgeScene.tsx`. Prvé 4 sekundy most vzniká, ďalších 12 sekúnd je bezšvá slučka. Všetko, čo sa v slučke hýbe, musí mať celý počet cyklov za slučku.
+Scéna je v `hero-animation/src/WebAiScene.tsx`. Prvé 4 sekundy sa skladá, ďalších 12 sekúnd je bezšvá slučka. Všetko, čo sa v slučke hýbe, musí mať celý počet cyklov za slučku.
 
 Remotion je pre firmy do 3 zamestnancov zadarmo, pri väčšej firme treba [firemnú licenciu](https://www.remotion.pro/license).
