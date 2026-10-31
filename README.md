@@ -15,6 +15,8 @@ python3 -m http.server 8000
 - `index.html` (angličtina, predvolená), `sk.html` (slovenčina), `css/style.css`, `js/main.js` – web
 - `assets/hero/<jazyk>/` – vyrenderované videá a statické obrázky pre hero sekciu
 - `assets/flags/` – vlajky prepínača jazyka (flag-icons, MIT)
+- `assets/og/`, `assets/icons/` – náhľady pre sociálne siete a ikony (`npm run render:social`)
+- `robots.txt`, `sitemap.xml` – pre vyhľadávače; pri zmene obsahu aktualizuj `lastmod`
 - `assets/fonts/` – Bricolage Grotesque (SIL OFL), hostovaný lokálne
 - `hero-animation/` – zdroj animácie v Remotion, na beh webu nie je potrebný
 

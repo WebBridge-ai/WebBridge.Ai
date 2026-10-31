@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://webbridge.ai/</loc>
+    <lastmod>2026-10-31</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://webbridge.ai/"/>
+    <xhtml:link rel="alternate" hreflang="sk" href="https://webbridge.ai/sk.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://webbridge.ai/"/>
+  </url>
+  <url>
+    <loc>https://webbridge.ai/sk.html</loc>
+    <lastmod>2026-10-31</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://webbridge.ai/"/>
+    <xhtml:link rel="alternate" hreflang="sk" href="https://webbridge.ai/sk.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://webbridge.ai/"/>
+  </url>
+</urlset>

@@ -29,7 +29,8 @@
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
     "lint": "eslint src && tsc",
-    "render:site": "bash render-site.sh"
+    "render:site": "bash render-site.sh",
+    "render:social": "bash render-social.sh"
   },
   "allowScripts": {
     "esbuild": false

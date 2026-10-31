@@ -81,7 +81,7 @@ export const TALL: Layout = {
 };
 
 // The layer every request passes through, in order.
-const LAYERS: { label: string; icon: LucideIcon }[] = [
+export const LAYERS: { label: string; icon: LucideIcon }[] = [
   { label: "Access", icon: KeyRound },
   { label: "Cache", icon: Zap },
   { label: "Router", icon: Split },
