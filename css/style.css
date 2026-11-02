@@ -929,8 +929,16 @@ html[lang="sk"].motion .hero-media {
     }
 }
 
-/* Phones: keep the buttons side by side. */
+/* Phones: all type one step larger (body copy at 18px), the buttons side by side. */
 @media (max-width: 480px) {
+    html {
+        font-size: 112.5%;
+    }
+
+    .section {
+        --node: 2.4rem;
+    }
+
     .hero-content {
         padding-top: 1rem;
     }
@@ -958,6 +966,13 @@ html[lang="sk"].motion .hero-media {
 
     .services-grid {
         grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* The narrowest phones: the two buttons stack instead of running off the screen. */
+@media (max-width: 359px) {
+    .hero-actions {
+        flex-wrap: wrap;
     }
 }
 
