@@ -24,6 +24,7 @@
     --accent: #ffb454;
     --ai: #7fd4ff;
     --gutter: clamp(1.25rem, 5vw, 5rem);
+    --content: 72rem;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -67,11 +68,17 @@ a {
     isolation: isolate;
 }
 
-/* The video sits under the copy in normal flow, so the two can never overlap. */
+/* The video sits under the copy in normal flow, so the two can never overlap.
+   On big screens it stops growing where its cards (1660 of its 1800 px) line up
+   with the sections, and the spare height goes above the headline and below it. */
 .hero-media {
     position: relative;
     flex: 1 1 0;
+    width: 100%;
+    max-width: calc(var(--content) * 1800 / 1660);
     min-height: min(calc(100vw * 600 / 1800), 26rem);
+    max-height: calc(var(--content) * 600 / 1660);
+    margin: 0 auto auto;
     background: url('../assets/hero/en/wide-poster.jpg') center / contain no-repeat;
 }
 
@@ -92,16 +99,21 @@ html[lang="sk"].motion .hero-media {
     object-fit: contain;
 }
 
-.site-header,
-.hero-content,
-.site-footer {
+.hero-content {
     padding-inline: var(--gutter);
+}
+
+/* Logo, language switch and footer line up with the sections on big screens. */
+.site-header,
+.site-footer {
+    padding-inline: max(var(--gutter), (100% - var(--content)) / 2);
 }
 
 .site-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: auto;
     padding-top: clamp(1.25rem, 3vh, 2.25rem);
 }
 
@@ -226,7 +238,7 @@ html[lang="sk"].motion .hero-media {
 .section {
     --node: 3.5rem;
     --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    max-width: calc(72rem + 2 * var(--gutter));
+    max-width: calc(var(--content) + 2 * var(--gutter));
     margin-inline: auto;
     padding: clamp(4rem, 9vw, 7rem) var(--gutter) clamp(3rem, 6vw, 5rem);
     scroll-margin-top: 1rem;
@@ -786,7 +798,8 @@ html[lang="sk"].motion .hero-media {
 /* Portrait screens get their own composition, with the web above the AI field. */
 @media (max-aspect-ratio: 1/1) {
     .hero-media {
-        min-height: calc(100vw * 1000 / 900);
+        min-height: calc(min(100vw, var(--content) * 1800 / 1660) * 1000 / 900);
+        max-height: calc(var(--content) * 1800 / 1660 * 1000 / 900);
         background-image: url('../assets/hero/en/tall-poster.jpg');
     }
 
@@ -858,7 +871,19 @@ html[lang="sk"].motion .hero-media {
     }
 }
 
-/* Phones: keep the buttons side by side and the footer on one line. */
+/* Small screens: the footer stacks into three lines instead of wrapping unevenly. */
+@media (max-width: 640px) {
+    .site-footer,
+    .footer-info {
+        flex-direction: column;
+    }
+
+    .site-footer {
+        align-items: flex-start;
+    }
+}
+
+/* Phones: keep the buttons side by side. */
 @media (max-width: 480px) {
     .hero-content {
         padding-top: 1rem;
@@ -887,11 +912,6 @@ html[lang="sk"].motion .hero-media {
 
     .services-grid {
         grid-template-columns: minmax(0, 1fr);
-    }
-
-    .site-footer {
-        flex-wrap: nowrap;
-        font-size: 0.82rem;
     }
 }
 
