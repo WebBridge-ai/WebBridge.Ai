@@ -24,7 +24,7 @@ docker build -t webbridge . && docker run --rm -p 8080:80 webbridge
 
 - `index.html` (angličtina, predvolená), `sk.html` (slovenčina, na webe `/sk`), `css/style.css`, `js/main.js` – web
 - `404.html`, `404-sk.html` – stránky pre neexistujúce adresy. Slovenskú dostanú adresy `/sk/…` a prehliadače nastavené na slovenčinu alebo češtinu, ostatní anglickú. Všetky cesty v nich začínajú `/`, lebo sa zobrazujú na ľubovoľnej adrese.
-- `Dockerfile`, `nginx.conf` – nasadenie
+- `Dockerfile`, `nginx.conf`, `fingerprint.sh` – nasadenie; pri zostavení obrazu dostane každý CSS, JS a súbor z `assets/` adresu s `?v=<hash>`, takže ho prehliadače držia v cache rok a po zmene si stiahnu novú verziu
 - `assets/hero/<jazyk>/` – vyrenderované videá a statické obrázky pre hero sekciu
 - `assets/flags/` – vlajky prepínača jazyka (flag-icons, MIT)
 - `assets/og/`, `assets/icons/` – náhľady pre sociálne siete a ikony (`npm run render:social`)
