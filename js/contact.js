@@ -8,7 +8,7 @@
 (function() {
     const API_URL = 'https://emails.webbridge.ai/v1/forms/webbridge-contact';
     // Cloudflare Turnstile site key (public).
-    const SITE_KEY = '';
+    const SITE_KEY = '0x4AAAAAAFwoUQYMY_5edqAc';
 
     const triggers = document.querySelectorAll('a[data-contact]');
     if (!triggers.length || !window.fetch || !window.HTMLDialogElement) {
