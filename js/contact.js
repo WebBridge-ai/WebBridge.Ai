@@ -118,9 +118,11 @@
                     <textarea id="cf-message" name="message" rows="5" minlength="10" maxlength="5000" required aria-describedby="cf-message-error"></textarea>
                     <p class="field-error" id="cf-message-error"></p>
                 </div>
+                <!-- A trap for bots. Its name and label mean nothing to browser
+                     autofill and password managers, which filled "website". -->
                 <div class="field-trap" aria-hidden="true">
-                    <label for="cf-website">Website</label>
-                    <input id="cf-website" name="website" type="text" tabindex="-1" autocomplete="off">
+                    <label for="cf-hp">Leave empty</label>
+                    <input id="cf-hp" name="hp" type="text" tabindex="-1" autocomplete="off">
                 </div>
                 <div class="contact-captcha"></div>
                 <div class="contact-actions">
@@ -365,7 +367,7 @@
                 lang: lang
             },
             turnstile: token,
-            honeypot: form.elements.website.value,
+            honeypot: form.elements.hp.value,
             elapsed_ms: Date.now() - openedAt
         };
 
