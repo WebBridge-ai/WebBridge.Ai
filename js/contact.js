@@ -6,7 +6,7 @@
 // to the WebBridge API, which checks the message again, verifies Turnstile and
 // e-mails it to info@. Include this script on any page that has such a link.
 (function() {
-    const API_URL = 'https://api.webbridge.ai/v1/forms/webbridge-contact';
+    const API_URL = 'https://emails.webbridge.ai/v1/forms/webbridge-contact';
     // Cloudflare Turnstile site key (public).
     const SITE_KEY = '';
 
