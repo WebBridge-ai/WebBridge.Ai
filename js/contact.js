@@ -5,6 +5,8 @@
 // contact form. Without JS the link stays a plain mailto: link. The form posts
 // to the WebBridge API, which checks the message again, verifies Turnstile and
 // e-mails it to info@. Include this script on any page that has such a link.
+// The value of data-contact (e.g. "hero") tells analytics where the form was
+// opened; each step is reported through analytics.js, if the visitor agreed.
 (function() {
     const API_URL = 'https://emails.webbridge.ai/v1/forms/webbridge-contact';
     // Cloudflare Turnstile site key (public).
@@ -28,6 +30,8 @@
             message: 'What can we help you with?',
             send: 'Send message',
             privacy: 'We use your details only to reply to you and delete them within 12 months. The form is protected by Cloudflare Turnstile.',
+            privacyLink: 'Privacy & cookies',
+            privacyUrl: '/privacy',
             alt: 'Prefer email?',
             doneTitle: 'Thank you, your message is on its way.',
             doneText: 'We’ll reply to',
@@ -53,6 +57,8 @@
             message: 'S čím vám môžeme pomôcť?',
             send: 'Odoslať správu',
             privacy: 'Údaje použijeme len na odpoveď a do 12 mesiacov ich zmažeme. Formulár chráni Cloudflare Turnstile.',
+            privacyLink: 'Ochrana údajov',
+            privacyUrl: '/sk/ochrana-udajov',
             alt: 'Radšej e-mailom?',
             doneTitle: 'Ďakujeme, správa je na ceste.',
             doneText: 'Odpovieme vám na',
@@ -122,7 +128,7 @@
                     <p class="contact-alt">${text.alt} <a href="mailto:info@webbridge.ai">info@webbridge.ai</a></p>
                 </div>
                 <p class="contact-status" role="status" aria-live="polite"></p>
-                <p class="contact-privacy">${text.privacy}</p>
+                <p class="contact-privacy">${text.privacy} <a href="${text.privacyUrl}">${text.privacyLink}</a></p>
             </form>
             <div class="contact-done" tabindex="-1" hidden>
                 <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
@@ -143,6 +149,19 @@
     let token = '';
     let waitingForToken = false;
     let sending = false;
+    let source = '';
+    let started = false;
+    let sent = false;
+
+    function track(name, params) {
+        if (window.wbTrack) {
+            window.wbTrack(name, Object.assign({ contact_source: source }, params));
+        }
+    }
+
+    function fail(reason) {
+        track('contact_error', { error_reason: reason });
+    }
 
     function open(event) {
         event.preventDefault();
@@ -155,6 +174,10 @@
             form.hidden = false;
             done.hidden = true;
         }
+        source = event.currentTarget.dataset.contact || 'page';
+        started = false;
+        sent = false;
+        track('contact_open');
         openedAt = Date.now();
         dialog.showModal();
         form.elements.name.focus();
@@ -165,6 +188,15 @@
         trigger.addEventListener('click', open);
         // Starts loading Turnstile a moment before the click.
         trigger.addEventListener('pointerenter', loadTurnstile, { once: true });
+    });
+    dialog.addEventListener('close', () => {
+        track('contact_close', { close_stage: sent ? 'sent' : started ? 'started' : 'empty' });
+    });
+    form.addEventListener('input', () => {
+        if (!started) {
+            started = true;
+            track('contact_start');
+        }
     });
     dialog.querySelector('.contact-close').addEventListener('click', () => dialog.close());
     dialog.querySelector('.contact-done-close').addEventListener('click', () => dialog.close());
@@ -192,6 +224,7 @@
                 waitingForToken = false;
                 setBusy(false);
                 showStatus(text.failed, true);
+                fail('network');
             }
         };
         document.head.appendChild(script);
@@ -222,6 +255,7 @@
                     waitingForToken = false;
                     setBusy(false);
                     showStatus(text.captcha, true);
+                    fail('captcha');
                 }
             }
         });
@@ -304,9 +338,11 @@
         if (firstInvalid) {
             showStatus('', false);
             firstInvalid.focus();
+            fail('validation');
             return;
         }
 
+        track('contact_submit');
         setBusy(true);
         if (sitekey && !token) {
             // Turnstile usually finishes on its own in a moment; send() runs then.
@@ -343,10 +379,14 @@
         } catch (error) {
             setBusy(false);
             showStatus(text.failed, true);
+            fail('network');
             return;
         }
 
         if (response.status === 202) {
+            sent = true;
+            // GA4's recommended event for a new lead; marked as the key event.
+            track('generate_lead');
             setBusy(false);
             showStatus('', false);
             resetTurnstile();
@@ -367,15 +407,19 @@
             if (first) {
                 form.elements[first].focus();
             }
+            fail('validation');
             return;
         }
         resetTurnstile();
         if (response.status === 403 && result.error === 'captcha') {
             showStatus(text.captcha, true);
+            fail('captcha');
         } else if (response.status === 429) {
             showStatus(text.busy, true);
+            fail('rate_limited');
         } else {
             showStatus(text.failed, true);
+            fail('server');
         }
     }
 })();

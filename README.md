@@ -23,6 +23,9 @@ docker build -t webbridge . && docker run --rm -p 8080:80 webbridge
 ## Štruktúra
 
 - `index.html` (angličtina, predvolená), `sk.html` (slovenčina, na webe `/sk`), `css/style.css`, `js/main.js` – web
+- `privacy.html`, `sk/ochrana-udajov.html` – ochrana osobných údajov a cookies (na webe `/privacy` a `/sk/ochrana-udajov`); IČO doplniť, keď bude s.r.o. zapísaná
+- `js/analytics.js` – cookie lišta a Google Analytics 4 (`G-Y6Y9XCHZQY`, účet „WebBridgeAI s.r.o.“). GA sa načíta až po kliknutí na Súhlasím, mimo webbridge.ai sa udalosti len vypíšu do konzoly. Udalosti: `contact_open`, `contact_start`, `contact_submit`, `generate_lead` (odoslaná správa, hlavná konverzia), `contact_error`, `contact_close`, `cta_click`, `language_switch`, `email_click`, `faq_open`; ich parametre sú v GA zaregistrované ako vlastné dimenzie
+- `js/contact.js` – kontaktný formulár; hodnota `data-contact` na tlačidle (`hero`, `closing`, `404`) sa v GA ukáže ako „Zdroj kontaktu“
 - `404.html`, `404-sk.html` – stránky pre neexistujúce adresy. Slovenskú dostanú adresy `/sk/…` a prehliadače nastavené na slovenčinu alebo češtinu, ostatní anglickú. Všetky cesty v nich začínajú `/`, lebo sa zobrazujú na ľubovoľnej adrese.
 - `Dockerfile`, `nginx.conf`, `fingerprint.sh` – nasadenie; pri zostavení obrazu dostane každý CSS, JS a súbor z `assets/` adresu s `?v=<hash>`, takže ho prehliadače držia v cache rok a po zmene si stiahnu novú verziu
 - `assets/hero/<jazyk>/` – vyrenderované videá a statické obrázky pre hero sekciu

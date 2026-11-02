@@ -4,7 +4,7 @@
 # Runs in the Docker build; the files in the repo stay untouched.
 set -eu
 cd /usr/share/nginx/html
-pages="index.html sk.html /usr/share/nginx/errors/404.html /usr/share/nginx/errors/404-sk.html"
+pages="$(find . -name "*.html") /usr/share/nginx/errors/404.html /usr/share/nginx/errors/404-sk.html"
 
 stamp() { # file, files that reference it
     file=$1
