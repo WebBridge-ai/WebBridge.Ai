@@ -10,6 +10,10 @@ Statický web bez build kroku:
 python3 -m http.server 8000
 ```
 
+## Nasadenie
+
+Coolify na https://coolify.webbridge.ai zostaví `Dockerfile` z vetvy `minimal-site` (nginx, port 80). Do obrazu ide len web, nie `hero-animation/` ani dokumentácia. Nový priečinok alebo súbor webu treba pridať aj do `Dockerfile`.
+
 ## Štruktúra
 
 - `index.html` (angličtina, predvolená), `sk.html` (slovenčina), `css/style.css`, `js/main.js` – web
