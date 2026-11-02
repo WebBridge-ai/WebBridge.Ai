@@ -788,6 +788,58 @@ html[lang="sk"].motion .hero-media {
     text-underline-offset: 3px;
 }
 
+/* ===================================
+   404
+   =================================== */
+/* No video here, so the copy sits in the middle of the screen. */
+.not-found .hero-content {
+    margin-bottom: auto;
+    padding-bottom: clamp(3rem, 12vh, 7rem);
+}
+
+/* The web's threads (amber) and the AI's threads (blue) meet at the missing page. */
+.not-found-code {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.75rem, 2vw, 1.5rem);
+    max-width: 44rem;
+    margin: 0 auto clamp(1.5rem, 4vh, 2.5rem);
+    font-size: clamp(4.5rem, 3rem + 7vw, 9rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.04em;
+}
+
+.not-found-threads {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 12rem;
+    height: 0.75em;
+    color: var(--accent);
+    fill: none;
+    stroke-width: 1.5;
+}
+
+.not-found-threads path {
+    vector-effect: non-scaling-stroke;
+}
+
+.not-found-threads-ai {
+    color: var(--ai);
+    transform: scaleX(-1);
+}
+
+.not-found .hero-content h1 {
+    font-size: clamp(1.9rem, 1.5rem + 1.6vw, 2.8rem);
+}
+
+.not-found .hero-content .not-found-sk {
+    margin-top: 1.25rem;
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
 @keyframes rise {
     from {
         opacity: 0;

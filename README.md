@@ -12,11 +12,19 @@ python3 -m http.server 8000
 
 ## Nasadenie
 
-Coolify na https://coolify.webbridge.ai zostaví `Dockerfile` z vetvy `minimal-site` (nginx, port 80). Do obrazu ide len web, nie `hero-animation/` ani dokumentácia. Nový priečinok alebo súbor webu treba pridať aj do `Dockerfile`.
+Coolify na https://coolify.webbridge.ai zostaví `Dockerfile` z vetvy `minimal-site` (nginx, port 80). Do obrazu ide len web, nie `hero-animation/` ani dokumentácia. Nový priečinok alebo súbor webu treba pridať aj do `Dockerfile`. Po pushnutí treba v Coolify kliknúť Redeploy, samo sa to nenasadí.
+
+`nginx.conf` dáva adresy bez `.html`: `/sk` servíruje `sk.html` a staré `/sk.html` presmeruje na `/sk`. Neexistujúce adresy dostanú `404.html`. Jednoduchý lokálny server (PhpStorm, `python3 -m http.server`) toto nevie, takže odkaz na slovenčinu tam vráti 404. Celý web ako na serveri spustíš cez Docker:
+
+```bash
+docker build -t webbridge . && docker run --rm -p 8080:80 webbridge
+```
 
 ## Štruktúra
 
-- `index.html` (angličtina, predvolená), `sk.html` (slovenčina), `css/style.css`, `js/main.js` – web
+- `index.html` (angličtina, predvolená), `sk.html` (slovenčina, na webe `/sk`), `css/style.css`, `js/main.js` – web
+- `404.html` – stránka pre neexistujúce adresy; všetky cesty v nej začínajú `/`, lebo sa zobrazuje na ľubovoľnej adrese
+- `Dockerfile`, `nginx.conf` – nasadenie
 - `assets/hero/<jazyk>/` – vyrenderované videá a statické obrázky pre hero sekciu
 - `assets/flags/` – vlajky prepínača jazyka (flag-icons, MIT)
 - `assets/og/`, `assets/icons/` – náhľady pre sociálne siete a ikony (`npm run render:social`)
